@@ -132,7 +132,7 @@ export default {
   data: () => ({
     dataLayout: false,
     drawer: true,
-    rail: true,
+    rail: false,
   }),
 
   //   watch:{
