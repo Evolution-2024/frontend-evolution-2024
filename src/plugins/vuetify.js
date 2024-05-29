@@ -1,10 +1,24 @@
 // Styles
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
 
 // Vuetify
-import { createVuetify } from 'vuetify'
+import { createVuetify } from "vuetify";
 
-export default createVuetify(
-  // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
-)
+const myCustomTheme = {
+  dark: false, // Puedes cambiar a `true` si prefieres un tema oscuro
+  colors: {
+    primary: "#3FC4C0", // Color primario
+    secondary: "#8FE0DE", // Color secundario
+    accent: "#62D9D5", // Color secundario
+  },
+};
+
+export default createVuetify({
+  theme: {
+    defaultTheme: "myCustomTheme",
+    themes: {
+      myCustomTheme,
+    },
+  },
+});
