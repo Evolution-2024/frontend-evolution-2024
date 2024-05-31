@@ -5,10 +5,10 @@
         class="elevation-0 bg-primary pa-3 rounded-lg d-flex align-center"
         :loading="loading"
       >
-        <v-icon color="white" class="d-none d-sm-flex">mdi-book-open-variant</v-icon>
-        <h3 class="font-weight-bold text-white px-0 px-sm-3">
-          Course Detail
-        </h3>
+        <v-icon color="white" class="d-none d-sm-flex"
+          >mdi-book-open-variant</v-icon
+        >
+        <h3 class="font-weight-bold text-white px-0 px-sm-3">Course Detail</h3>
         <v-spacer></v-spacer>
         <v-btn
           variant="outlined"
@@ -34,8 +34,46 @@
       <v-card class="elevation-0">
         <h1>{{ course.name }}</h1>
         <p class="text-caption pb-3">Descripcion</p>
-        <p class="text-justify">{{ course.description }} || Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit ab recusandae magnam in laboriosam consequatur, culpa iusto autem esse voluptatem quam inventore officiis, adipisci porro. Totam voluptas quidem veritatis officia! Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit ab recusandae magnam in laboriosam consequatur, culpa iusto autem esse voluptatem quam inventore officiis, adipisci porro. Totam voluptas quidem veritatis officia! Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit ab recusandae magnam in laboriosam consequatur, culpa iusto autem esse voluptatem quam inventore officiis, adipisci porro. Totam voluptas quidem veritatis officia!</p>
+        <p class="text-justify">
+          {{ course.description }} || Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Fugit ab recusandae magnam in laboriosam
+          consequatur, culpa iusto autem esse voluptatem quam inventore
+          officiis, adipisci porro. Totam voluptas quidem veritatis officia!
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit ab
+          recusandae magnam in laboriosam consequatur, culpa iusto autem esse
+          voluptatem quam inventore officiis, adipisci porro. Totam voluptas
+          quidem veritatis officia! Lorem ipsum dolor sit amet consectetur
+          adipisicing elit. Fugit ab recusandae magnam in laboriosam
+          consequatur, culpa iusto autem esse voluptatem quam inventore
+          officiis, adipisci porro. Totam voluptas quidem veritatis officia!
+        </p>
         <!-- Aquí puedes agregar más detalles del curso -->
+      </v-card>
+      <v-card class="pa-3" color="#f2f2f2">
+        <h3>Materiales</h3>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus,
+        quam error! Quisquam recusandae, earum incidunt totam quam reprehenderit
+        ipsa fugit rem praesentium provident sunt error omnis accusantium, porro
+        tempora quidem.
+        <div class="d-flex flex-column ga-2 mt-2">
+          <v-card
+            v-for="(item, index) in materials"
+            :key="index"
+            class="pa-2"
+            variant="outlined"
+          >
+            <p class="font-weight-bold">
+              Material Semana - 00{{ item.id }}: {{ item.title }}
+            </p>
+            <p>
+              {{ item.description }} || Lorem ipsum dolor sit amet, consectetur
+              adipisicing elit. Nulla ipsum rem ullam, saepe facilis iure
+              eligendi est corporis? Consequatur debitis, corporis qui ipsa quo
+              reprehenderit commodi porro tempora voluptates expedita?
+            </p>
+            <v-btn disabled> Visualizar </v-btn>
+          </v-card>
+        </div>
       </v-card>
     </div>
     <template v-slot:rightarea>
@@ -88,7 +126,7 @@
           <v-text-field
             v-model="nameCourse"
             :rules="nameCourseRules"
-            label="Name"
+            label="Title"
             density="compact"
             variant="outlined"
             hide-details="false"
@@ -100,6 +138,17 @@
             v-model="descriptionCourse"
             :rules="nameCourseRules"
             label="Description"
+            density="compact"
+            variant="outlined"
+            hide-details="false"
+            clearable
+            class="pb-3"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="fileCourse"
+            :rules="nameCourseRules"
+            label="File"
             density="compact"
             variant="outlined"
             hide-details="false"
@@ -131,8 +180,10 @@ export default {
       amenities: [1, 4],
       nameCourse: "",
       descriptionCourse: "",
+      fileCourse: "",
       nameCourseRules: [(v) => !!v || "Required"],
       courseId: null,
+      materials: [],
       course: {
         id: null,
         name: null,
@@ -153,16 +204,18 @@ export default {
       if (valid) {
         this.loading = true;
         try {
-          const response = await this.$axios3.post("/courses", {
-            name: this.nameCourse,
+          const response = await this.$axios3.post("/topics", {
+            title: this.nameCourse,
             description: this.descriptionCourse,
+            file: this.descriptionCourse,
+            courseId: this.courseId,
           });
           console.log(response);
           this.loading = false;
           this.$refs.form.reset();
           this.$refs.form.resetValidation();
           this.closeRegister();
-          this.getCourses();
+          this.getMaterials();
         } catch (error) {
           console.error("Error al iniciar sesión:", error);
         }
@@ -180,6 +233,20 @@ export default {
         // Manejar el error, por ejemplo, redirigir al usuario o mostrar un mensaje de error
       }
     },
+    async getMaterials() {
+      this.loading = true;
+
+      try {
+        const response = await this.$axios3.get(
+          `/topics?courseId=${this.courseId}`
+        );
+        this.materials = response.data.content;
+        this.loading = false;
+      } catch (error) {
+        console.error("Error al obtener los detalles del curso:", error);
+        // Manejar el error, por ejemplo, redirigir al usuario o mostrar un mensaje de error
+      }
+    },
   },
   mounted() {
     this.getCourses();
@@ -187,6 +254,7 @@ export default {
   async created() {
     this.courseId = this.$route.params.id;
     this.getCourses();
+    this.getMaterials();
   },
 };
 </script>
