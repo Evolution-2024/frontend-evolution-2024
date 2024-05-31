@@ -18,7 +18,7 @@
           <h3 class="pb-3 text-center">Iniciar Sesion</h3>
           <v-text-field
             v-model="email"
-            :rules="nameRules"
+            :rules="emailRules"
             label="Email"
             density="compact"
             variant="outlined"
@@ -31,7 +31,8 @@
 
           <v-text-field
             v-model="password"
-            :rules="nameRules"
+            :rules="contentRules"
+            :type="!marker ? '' : 'password'"
             :append-inner-icon="
               marker ? 'mdi-lock-outline' : 'mdi-lock-open-variant-outline'
             "
@@ -52,19 +53,34 @@
             closable
           >
             <p style="line-height: 1.2 !important">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi,
-              ratione debitis quis est labore voluptatibus!
+              Por favor, ingrese su correo y contraseña y verifique que sean los
+              correctos para acceder a la plataforma. ¡Gracias!
             </p>
           </v-alert>
 
           <div class="d-flex flex-column">
-            <v-btn flat color="primary" block @click="validate">
+            <v-btn flat color="primary" block @click="validateForm">
               <span class="font-weight-bold text-white">Ingresar</span>
             </v-btn>
           </div>
         </v-form>
       </v-card>
       <p class="pt-5 text-center text-white text-caption">v 1.0.0</p>
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="2000"
+        color="green-accent-4"
+        rounded="lg"
+        elevation="24"
+      >
+        <p class="text-white">Ingreso <strong>correctamente</strong>.</p>
+
+        <template v-slot:actions>
+          <v-btn color="white" icon @click="snackbar = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </div>
 </template>
@@ -88,12 +104,15 @@ export default {
   data: () => ({
     dataLoginView: false,
     marker: true,
+    snackbar: false,
     email: "",
+    user: "",
     password: "",
-    nameRules: [
+    emailRules: [
       (v) => !!v || "Required",
-      (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
+    contentRules: [(v) => !!v || "Required"],
   }),
 
   //   watch:{
@@ -105,9 +124,6 @@ export default {
   computed: {},
 
   methods: {
-    logLoginView() {
-      console.log("SAMPLE LOG --->", this.Title);
-    },
     initVanta() {
       if (window.VANTA) {
         window.VANTA.WAVES({
@@ -125,11 +141,11 @@ export default {
         });
       }
     },
-    async validate() {
+    async validateForm() {
       const { valid } = await this.$refs.form.validate();
 
       if (valid) {
-        this.goToLogin();
+        this.login();
       }
     },
     reset() {
@@ -141,9 +157,47 @@ export default {
     toggleMarker() {
       this.marker = !this.marker;
     },
+    async login() {
+      this.email == 'juliosa@gmail.com'? this.user= 'JulioSZ':''
+      try {
+        const response = await this.$axios2.post("/users/auth/sign-in", {
+          username: this.user,
+          password: this.password,
+        });
+        this.handleLoginResponse(response.data);
+      } catch (error) {
+        console.error("Error al iniciar sesión:", error);
+      }
+    },
+    handleLoginResponse(data) {
+      this.user = {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        roles: data.roles || [], // Manejar si roles es null
+      };
+
+      // Almacenar el token de manera segura
+      localStorage.setItem("authToken", data.token); // O utiliza cookies
+
+
+      // Configurar el token para futuras solicitudes
+      this.$axios1.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${data.token}`;
+
+
+        this.goToLogin();
+
+    },
+
     goToLogin() {
-      this.$router.push({ name: 'home' });
-    }
+        this.snackbar = true;
+
+      setTimeout(() => {
+        this.$router.push({ name: "home" });
+      }, 550);
+    },
   },
 
   mounted() {

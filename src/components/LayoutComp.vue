@@ -61,19 +61,24 @@
         <v-list density="compact" nav>
           <v-list-subheader v-show="!rail">MODULOS</v-list-subheader>
           <v-list-item
-            prepend-icon="mdi-home-city"
-            title="Home"
-            value="home"
+            prepend-icon="mdi-view-dashboard"
+            title="Dashboard"
+            value="dashboard"
+            @click="pushName('home')"
+          ></v-list-item>
+
+          <v-list-item
+            prepend-icon="mdi-book-open-variant"
+            title="Courses"
+            value="courses"
+            @click="pushName('courses')"
           ></v-list-item>
           <v-list-item
-            prepend-icon="mdi-account"
-            title="My Account"
-            value="account"
-          ></v-list-item>
-          <v-list-item
+            disabled
             prepend-icon="mdi-account-group-outline"
             title="Users"
             value="users"
+            @click="pushName('')"
           ></v-list-item>
         </v-list>
 
@@ -106,7 +111,7 @@
       class="d-flex align-center justify-center"
       :class="`drawer_main${rail ? '_close' : '_open'}`"
     >
-      <div class="mr-2 pa-2 w-100">
+      <div class="mr-2 py-2 px-4 px-md-2 w-100">
         <slot></slot>
       </div>
     </v-main>
@@ -152,9 +157,14 @@ export default {
       if (this.rail) {
         console.log("SAMPLE LOG --->", this.Title);
       } else {
+        localStorage.removeItem("authToken"); // O limpiar la cookie
+        delete this.$axios1.defaults.headers.common["Authorization"];
         console.log("SAMPLE OUT --->", this.Title);
         this.$router.push({ name: "login" });
       }
+    },
+    pushName(nameString) {
+      this.$router.push({ name: nameString });
     },
   },
 

@@ -7,53 +7,90 @@
         <v-icon color="white">mdi-view-dashboard</v-icon>
         <h3 class="font-weight-bold text-white px-3">Dashboard</h3>
         <v-spacer></v-spacer>
-        <v-btn variant="outlined" density="comfortable" color="white"
+        <!-- <v-btn variant="outlined" density="comfortable" color="white"
           >SAMPLE</v-btn
-        >
+        > -->
       </v-card>
-      <v-card class="d-flex ga-2 elevation-0">
-        <v-card
-          class="pa-3 d-flex flex-column ga-3 elevation-0 rounded-lg"
-          color="#f9f9f9"
-          
-        >
-          <p>SAMPLE</p>
-          <apexchart
-            type="line"
-            height="350"
-            width="550"
-            :options="chartOptions"
-            :series="series"
-          ></apexchart>
-          <div class="text-justify">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-            eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-            voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-            molestiae quasi eaque vero! Lorem ipsum, dolor sit amet consectetur
-            adipisicing elit. Itaque, eveniet aut ut iure cumque sed veritatis
-            praesentium eum, minima voluptate earum voluptatibus suscipit?
-            Magnam iusto excepturi molestiae quasi eaque vero!
-          </div>
-        </v-card>
-        <v-card class="text-justify pa-3 elevation-0 d-flex" max-width="650" color="">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
-          necessitatibus doloremque minima debitis esse eos reprehenderit
-          repellendus atque perferendis cupiditate dolorem, saepe accusantium,
-          cumque recusandae voluptatem? Mollitia, id sapiente? Lorem ipsum dolor
-          sit amet consectetur adipisicing elit. Id, fugit necessitatibus
-          doloremque minima debitis esse eos reprehenderit repellendus atque
-          perferendis cupiditate dolorem, saepe accusantium, cumque recusandae
-          voluptatem? Mollitia, id sapiente? Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Id, fugit necessitatibus doloremque
-          minima debitis esse eos reprehenderit repellendus atque perferendis
-          cupiditate dolorem, saepe accusantium, cumque recusandae voluptatem?
-          Mollitia, id sapiente? Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Id, fugit necessitatibus doloremque minima debitis
-          esse eos reprehenderit repellendus atque perferendis cupiditate
-          dolorem, saepe accusantium, cumque recusandae voluptatem? Mollitia, id
-          sapiente?
-        </v-card>
-      </v-card>
+      <v-container class="elevation-0">
+        <v-row>
+          <v-col class="" cols="12" md="7">
+            <v-card class="pa-3 d-flex flex-column ga-2 elevation-0 rounded-lg" color="#f9f9f9">
+              <apexchart
+                type="line"
+                height="350"
+                max-width="650"
+                :options="chartOptions"
+                :series="series"
+              ></apexchart>
+              <v-card class="text-justify pa-2" variant="outlined">
+                <h3>Announcement</h3>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Itaque, eveniet aut ut iure cumque sed veritatis praesentium
+                eum, minima voluptate earum voluptatibus suscipit? Magnam iusto
+                excepturi molestiae quasi eaque vero! Lorem ipsum, dolor sit
+                amet consectetur adipisicing elit.
+              </v-card>
+              <v-card class="text-justify pa-2" variant="outlined">
+                <h3>Announcement</h3>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Itaque, eveniet aut ut iure cumque sed veritatis praesentium
+                eum, minima voluptate earum voluptatibus suscipit? Magnam iusto
+                excepturi molestiae quasi eaque vero! Lorem ipsum, dolor sit
+                amet consectetur adipisicing elit.
+              </v-card>
+              <v-card class="text-justify pa-2" variant="outlined">
+                <h3>Announcement</h3>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Itaque, eveniet aut ut iure cumque sed veritatis praesentium
+                eum, minima voluptate earum voluptatibus suscipit? Magnam iusto
+                excepturi molestiae quasi eaque vero! Lorem ipsum, dolor sit
+                amet consectetur adipisicing elit.
+              </v-card>
+            </v-card>
+          </v-col>
+          <v-col class="d-flex flex-column ga-2" cols="12" md="5">
+            <v-card class="text-justify pa-3 elevation-0 bg-primary" color="">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
+              necessitatibus doloremque minima debitis esse eos reprehenderit
+              repellendus atque perferendis cupiditate dolorem, saepe
+              accusantium, cumque recusandae voluptatem? Mollitia, id sapiente?
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </v-card>
+            <v-card class="text-justify pa-2" variant="outlined">
+                <h3>Announcement</h3>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Itaque, eveniet aut ut iure cumque sed veritatis praesentium
+                eum, minima voluptate earum voluptatibus suscipit? Magnam iusto
+                excepturi molestiae quasi eaque vero! Lorem ipsum, dolor sit
+                amet consectetur adipisicing elit.
+              </v-card>
+            <v-card class="text-justify pa-2" variant="outlined">
+                <h3>Announcement</h3>
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                Itaque, eveniet aut ut iure cumque sed veritatis praesentium
+                eum, minima voluptate earum voluptatibus suscipit? Magnam iusto
+                excepturi molestiae quasi eaque vero! Lorem ipsum, dolor sit
+                amet consectetur adipisicing elit.
+              </v-card>
+            <v-card class="text-justify pa-3 elevation-0 bg-primary" color="">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
+              necessitatibus doloremque minima debitis esse eos reprehenderit
+              repellendus atque perferendis cupiditate dolorem, saepe
+              accusantium, cumque recusandae voluptatem? Mollitia, id sapiente?
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </v-card>
+            <v-card class="text-justify pa-3 elevation-0 bg-primary" color="">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
+              necessitatibus doloremque minima debitis esse eos reprehenderit
+              repellendus atque perferendis cupiditate dolorem, saepe
+              accusantium, cumque recusandae voluptatem? Mollitia, id sapiente?
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </v-card>
+            
+            
+          </v-col>
+        </v-row>
+      </v-container>
     </div>
     <template v-slot:rightarea>
       <v-card class="pa-2 elevation-0">

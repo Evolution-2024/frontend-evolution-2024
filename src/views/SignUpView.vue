@@ -12,7 +12,7 @@ export default {
     alumnos: []
   }),
   mounted() {
-    this.$axios
+    this.$axios1
       .get("/character")
       .then((response) => {
         this.alumnos = response.data.results;
