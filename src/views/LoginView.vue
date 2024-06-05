@@ -158,10 +158,10 @@ export default {
       this.marker = !this.marker;
     },
     async login() {
-      this.email == 'juliosa@gmail.com'? this.user= 'JulioSZ':''
+      // this.email == 'juliosa@gmail.com'? this.user= 'JulioSZ':''
       try {
         const response = await this.$axios2.post("/users/auth/sign-in", {
-          username: this.user,
+          email: this.email,
           password: this.password,
         });
         this.handleLoginResponse(response.data);
@@ -179,6 +179,7 @@ export default {
 
       // Almacenar el token de manera segura
       localStorage.setItem("authToken", data.token); // O utiliza cookies
+      localStorage.setItem("user", JSON.stringify(this.user)); // O utiliza cookies
 
 
       // Configurar el token para futuras solicitudes
