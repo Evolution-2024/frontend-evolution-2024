@@ -5,23 +5,36 @@
         class="elevation-0 bg-primary pa-3 rounded-lg d-flex align-center"
         :loading="loading"
       >
-        <v-icon color="white">mdi-book-open-variant</v-icon>
-        <h3 class="font-weight-bold text-white px-3">Courses View</h3>
+        <v-icon color="white">mdi-google-classroom</v-icon>
+        <h3 class="font-weight-bold text-white px-3">Sections View</h3>
         <v-spacer></v-spacer>
+        <v-select
+          max-width="150"
+          density="compact"
+          variant="outlined"
+          required
+          hide-details
+          class="custom-select pr-2"
+          v-model="selectGradeId"
+          label="Grade"
+          item-title="label"
+          item-value="value"
+          :items="gradesSelect"
+        ></v-select>
         <v-btn
           variant="outlined"
           density="comfortable"
-          class="px-2 mr-2"
+          class="px-0 px-sm-2 mr-2"
           color="white"
           @click="getCourses"
         >
           <p class="d-none d-md-flex">Update</p>
-          <v-icon class="ml-1">mdi-refresh</v-icon>
+          <v-icon class="ml-0 ml-md-1">mdi-refresh</v-icon>
         </v-btn>
         <v-btn
           variant="outlined"
           density="comfortable"
-          class="px-2"
+          class="px-0 px-sm-2"
           color="white"
           @click="openRegister"
         >
@@ -29,17 +42,16 @@
           <v-icon class="ml-1">mdi-pen</v-icon>
         </v-btn>
       </v-card>
-      <v-card class="d-flex flex-wrap ga-3  elevation-0 overflow-visible">
+      <v-card class="d-flex flex-wrap ga-3 elevation-0 overflow-visible">
         <v-card
           v-for="(item, index) in courses"
           :loading="loadCard == item.id"
           :key="index"
           max-width="320"
           class="pa-4 elevation-3 rounded-lg"
-          @click="goToCourseViewDetail(item.id)"
         >
           <h3 class="d-flex">
-            {{ item.name }} - 00{{ item.id }} <v-spacer></v-spacer>
+            {{ item.name }} - {{ item.code }} <v-spacer></v-spacer>
             <v-icon>mdi-book-open-variant</v-icon>
           </h3>
           <p class="text-caption">Descripcion:</p>
@@ -78,10 +90,22 @@
           expedita quam architecto similique provident laboriosam quos
           reprehenderit ad natus repellat officia ipsam, quod inventore tempore
           facilis necessitatibus explicabo libero!
+          {{ sectionEntity }}
         </span>
         <v-form ref="form" class="pt-3 rounded-lg w-100">
           <v-text-field
-            v-model="nameCourse"
+            v-model="sectionEntity.code"
+            :rules="nameCourseRules"
+            label="Code"
+            density="compact"
+            variant="outlined"
+            hide-details="false"
+            clearable
+            class="pb-3"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="sectionEntity.name"
             :rules="nameCourseRules"
             label="Name"
             density="compact"
@@ -91,17 +115,30 @@
             class="pb-3"
             required
           ></v-text-field>
+
           <v-textarea
-            v-model="descriptionCourse"
+            v-model="sectionEntity.description"
             :rules="nameCourseRules"
+            clearable
             label="Description"
             density="compact"
             variant="outlined"
             hide-details="false"
-            clearable
             class="pb-3"
             required
           ></v-textarea>
+          <v-select
+            class="pb-3"
+            density="compact"
+            variant="outlined"
+            required
+            hide-details="false"
+            v-model="sectionEntity.gradeId"
+            label="Select"
+            item-title="label"
+            item-value="value"
+            :items="grades"
+          ></v-select>
         </v-form>
         <v-btn flat @click="postCourse" :loading="loading"> Registrar </v-btn>
       </v-card>
@@ -124,90 +161,63 @@ export default {
       loading: false,
       dialog: false,
       loadCard: null,
+      selectGradeId: null,
       nameCourse: "",
       descriptionCourse: "",
       nameCourseRules: [(v) => !!v || "Required"],
-      series: [
+      grades: [
         {
-          name: "TEAM A",
-          type: "column",
-          data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
+          label: "1 GRADO",
+          value: 1,
         },
         {
-          name: "TEAM B",
-          type: "area",
-          data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+          label: "2 GRADO",
+          value: 2,
         },
         {
-          name: "TEAM C",
-          type: "line",
-          data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+          label: "3 GRADO",
+          value: 3,
+        },
+        {
+          label: "4 GRADO",
+          value: 4,
+        },
+        {
+          label: "5 GRADO",
+          value: 5,
         },
       ],
-      chartOptions: {
-        chart: {
-          height: 350,
-          type: "line",
-          stacked: false,
+      gradesSelect: [
+        {
+          label: "1 GRADO",
+          value: 1,
         },
-        stroke: {
-          width: [0, 2, 5],
-          curve: "smooth",
+        {
+          label: "2 GRADO",
+          value: 2,
         },
-        plotOptions: {
-          bar: {
-            columnWidth: "50%",
-          },
+        {
+          label: "3 GRADO",
+          value: 3,
         },
-
-        fill: {
-          opacity: [0.85, 0.25, 1],
-          gradient: {
-            inverseColors: false,
-            shade: "light",
-            type: "vertical",
-            opacityFrom: 0.85,
-            opacityTo: 0.55,
-            stops: [0, 100, 100, 100],
-          },
+        {
+          label: "4 GRADO",
+          value: 4,
         },
-        labels: [
-          "01/01/2003",
-          "02/01/2003",
-          "03/01/2003",
-          "04/01/2003",
-          "05/01/2003",
-          "06/01/2003",
-          "07/01/2003",
-          "08/01/2003",
-          "09/01/2003",
-          "10/01/2003",
-          "11/01/2003",
-        ],
-        markers: {
-          size: 0,
+        {
+          label: "5 GRADO",
+          value: 5,
         },
-        xaxis: {
-          type: "datetime",
+        {
+          label: "TODOS GRADO",
+          value: null,
         },
-        yaxis: {
-          title: {
-            text: "Points",
-          },
-          min: 0,
-        },
-        tooltip: {
-          shared: true,
-          intersect: false,
-          y: {
-            formatter: function (y) {
-              if (typeof y !== "undefined") {
-                return y.toFixed(0) + " points";
-              }
-              return y;
-            },
-          },
-        },
+      ],
+      sectionEntity: {
+        code: null,
+        name: null,
+        description: null,
+        gradeId: null,
       },
     };
   },
@@ -224,10 +234,10 @@ export default {
       if (valid) {
         this.loading = true;
         try {
-          const response = await this.$axios3.post("/courses", {
-            name: this.nameCourse,
-            description: this.descriptionCourse,
-          });
+          const response = await this.$axios3.post(
+            "/sections",
+            this.sectionEntity
+          );
           console.log(response);
           this.loading = false;
           this.$refs.form.reset();
@@ -240,17 +250,22 @@ export default {
       }
     },
     goToCourseViewDetail(courseId) {
-        this.loadCard = courseId;
-        setTimeout(() => {
-            this.loadCard = null;
-            this.$router.push({ name: "course-details", params: { id: courseId } });
-            
-        }, 350);
+      this.loadCard = courseId;
+      setTimeout(() => {
+        this.loadCard = null;
+        this.$router.push({ name: "course-details", params: { id: courseId } });
+      }, 350);
     },
     async getCourses() {
       this.loading = true;
       try {
-        const response = await this.$axios3.get("/courses?size=100");
+        const response = await this.$axios3.get(
+          `/sections?${
+            this.selectGradeId != null
+              ? "gradeId=" + this.selectGradeId + "&"
+              : ""
+          }size=100`
+        );
         this.courses = response.data.resource;
         console.log(this.courses);
         this.loading = false;
@@ -268,5 +283,24 @@ export default {
   mounted() {
     this.getCourses();
   },
+  watch: {
+    selectGradeId(newVal) {
+      console.log("NEW VAL --->", newVal);
+      this.getCourses();
+    },
+  },
 };
 </script>
+
+<style>
+.custom-select .v-input__control {
+  min-height: 30px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.custom-select .v-input__slot {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+</style>

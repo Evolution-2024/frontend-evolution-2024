@@ -199,10 +199,18 @@ export default {
         this.$router.push({ name: "home" });
       }, 550);
     },
+    changeThemeColor(color) {
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', color);
+      }
+    }
   },
 
   mounted() {
     this.initVanta();
+    this.changeThemeColor('#027b7b');
+
   },
 
   //   created(){

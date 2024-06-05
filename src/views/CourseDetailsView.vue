@@ -17,7 +17,7 @@
           color="white"
           @click="getCourses"
         >
-          Update
+          <p class="d-none d-md-flex">Update</p>
           <v-icon class="ml-1">mdi-refresh</v-icon>
         </v-btn>
         <v-btn
@@ -27,7 +27,7 @@
           color="white"
           @click="openRegister"
         >
-          Register
+          <p class="d-none d-md-flex">Register</p>
           <v-icon class="ml-1">mdi-pen</v-icon>
         </v-btn>
       </v-card>
@@ -101,7 +101,7 @@
       </v-card>
     </template>
     <v-dialog v-model="dialog" max-width="600">
-      <v-card class="pa-4">
+      <v-card class="pa-4 rounded-lg">
         <div class="d-flex">
           <h3>Registrar Nuevo Curso</h3>
           <v-spacer></v-spacer>
@@ -226,7 +226,7 @@ export default {
 
       try {
         const response = await this.$axios3.get(`/courses?id=${this.courseId}`);
-        this.course = response.data.content[0];
+        this.course = response.data.resource[0];
         this.loading = false;
       } catch (error) {
         console.error("Error al obtener los detalles del curso:", error);
