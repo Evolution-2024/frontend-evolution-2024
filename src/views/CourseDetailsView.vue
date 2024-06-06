@@ -240,7 +240,7 @@ export default {
         const response = await this.$axios3.get(
           `/topics?courseId=${this.courseId}`
         );
-        this.materials = response.data.content;
+        this.materials = response.data.resource;
         this.loading = false;
       } catch (error) {
         console.error("Error al obtener los detalles del curso:", error);
