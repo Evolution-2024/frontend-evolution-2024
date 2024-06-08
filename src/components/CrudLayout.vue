@@ -57,6 +57,7 @@
               <card-custom
                 :headers="headers"
                 :entityProperty="item"
+                :hide-detail="hideDetail"
                 @delete="deleteItem"
                 @edit="editItem"
                 @detail="detailItem"
@@ -177,9 +178,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    alter: {
+      type: Boolean,
+      default: false,
+    },
     entityProperty: {
       type: Object,
       required: true,
+    },
+    hideDetail: {
+      type: Boolean,
+      default: false,
     },
     headers: {
       type: Array,
@@ -230,12 +239,21 @@ export default {
     async getAll() {
       this.loadingCrud = true;
       try {
-        const response = await this.$axios3.get(
-          `/${this.endPoint}${
-            this.filters ? `?${this.crudFilter}=${this.crudDetail}&` : "?"
-          }size=100`
-        );
-        this.itemsCrud = response.data.resource;
+        if (this.alter) {
+          const response = await this.$axios2.get(
+            `/${this.endPoint}${
+              this.filters ? `?${this.crudFilter}=${this.crudDetail}&` : "?"
+            }size=100`
+          );
+          this.itemsCrud = response.data.resource;
+        } else {
+          const response = await this.$axios3.get(
+            `/${this.endPoint}${
+              this.filters ? `?${this.crudFilter}=${this.crudDetail}&` : "?"
+            }size=100`
+          );
+          this.itemsCrud = response.data.resource;
+        }
         console.log(`get - /${this.endPoint}`, this.itemsCrud);
         this.loadingCrud = false;
       } catch (error) {
@@ -245,10 +263,17 @@ export default {
     async deleteItem(itemId) {
       this.loadingCrud = true;
       try {
-        const response = await this.$axios3.delete(
-          `/${this.endPoint}/${itemId}`
-        );
-        console.log(`delete - /${this.endPoint}/${itemId}`, response);
+        if (this.alter) {
+          const response = await this.$axios2.delete(
+            `/${this.endPoint}/${itemId}`
+          );
+          console.log(`delete - /${this.endPoint}/${itemId}`, response);
+        } else {
+          const response = await this.$axios3.delete(
+            `/${this.endPoint}/${itemId}`
+          );
+          console.log(`delete - /${this.endPoint}/${itemId}`, response);
+        }
         this.loadingCrud = false;
         this.getAll();
       } catch (error) {
@@ -275,14 +300,25 @@ export default {
       if (valid) {
         this.loadingCrud = true;
         try {
-          const response = await this.$axios3[this.onEdit ? "put" : "post"](
-            `/${this.endPoint}`,
-            this.entityProperty
-          );
-          console.log(
-            `${this.onEdit ? "put" : "post"} - /${this.endPoint}`,
-            response
-          );
+          if (this.alter) {
+            const response = await this.$axios2[this.onEdit ? "put" : "post"](
+              `/${this.endPoint}`,
+              this.entityProperty
+            );
+            console.log(
+              `${this.onEdit ? "put" : "post"} - /${this.endPoint}`,
+              response
+            );
+          } else {
+            const response = await this.$axios3[this.onEdit ? "put" : "post"](
+              `/${this.endPoint}`,
+              this.entityProperty
+            );
+            console.log(
+              `${this.onEdit ? "put" : "post"} - /${this.endPoint}`,
+              response
+            );
+          }
           this.loadingCrud = false;
           this.closeDialog();
           this.getAll();

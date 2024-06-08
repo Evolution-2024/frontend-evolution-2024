@@ -59,6 +59,7 @@
                   <v-tooltip activator="parent" location="top">Edit</v-tooltip>
                 </v-btn>
                 <v-btn
+                  v-if="!hideDetail"
                   size="small"
                   variant="tonal"
                   color="info"
@@ -97,6 +98,10 @@ export default {
     headers: {
       type: Array,
       required: true,
+    },
+    hideDetail: {
+      type: Boolean,
+      default: false,
     },
   },
 

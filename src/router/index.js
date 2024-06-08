@@ -18,6 +18,11 @@ const routes = [
     component: () => import('../views/UsersView.vue')
   },
   {
+    path: '/competences',
+    name: 'competences',
+    component: () => import('../views/CompetencesView.vue')
+  },
+  {
     path: '/sections',
     name: 'sections',
     component: () => import('../views/SectionsView.vue')

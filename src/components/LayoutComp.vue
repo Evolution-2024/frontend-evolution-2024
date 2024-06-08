@@ -83,6 +83,12 @@
             value="sections"
             @click="pushName('sections')"
           ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-home"
+            title="Competences"
+            value="competences"
+            @click="pushName('competences')"
+          ></v-list-item>
         </v-list>
 
         <div class="flex-fill d-flex flex-column justify-end">
@@ -100,14 +106,11 @@
       </v-card>
     </v-navigation-drawer>
 
-    <v-main
-      class="d-flex"
-      :class="`drawer_main${rail ? '_close' : '_open'}`"
-    >
+    <v-main class="d-flex" :class="`drawer_main${rail ? '_close' : '_open'}`">
       <div class="w-100">
         <v-card
           class="d-flex flex-column d-sm-none w-100 pa-3 pt-4 rounded-lg mb-2 elevation-0"
-          :color="!expand ? '':'#f2f2f2'"
+          :color="!expand ? '' : '#f2f2f2'"
         >
           <img
             src="/evolution_logo.png"
@@ -124,7 +127,11 @@
             </div>
           </div>
           <v-expand-transition>
-            <v-card v-show="expand" class="pt-4 px-2 elevation-0" color="transparent">
+            <v-card
+              v-show="expand"
+              class="pt-4 px-2 elevation-0"
+              color="transparent"
+            >
               <h4 class="text-center">Evolution</h4>
               <v-list density="compact" bg-color="transparent">
                 <v-list-item
@@ -157,18 +164,28 @@
                   @click="pushName('sections')"
                 ></v-list-item>
                 <v-list-item
+                  title="Competences"
+                  class="text-center"
+                  density="compact"
+                  value="competences"
+                  @click="pushName('competences')"
+                ></v-list-item>
+                <v-list-item
                   class="text-center font-weight-black"
                   density="compact"
                   value="sections"
                   @click="logOut"
                 >
-                <v-list-item-title>
-                  <p class="font-weight-black">Log Out</p>
-                </v-list-item-title>
+                  <v-list-item-title>
+                    <p class="font-weight-black">Log Out</p>
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
-              <v-card class="d-flex justify-center mb-n1 elevation-0" color="transparent" >
-                <v-icon @click="expand = !expand" >mdi-chevron-up</v-icon>
+              <v-card
+                class="d-flex justify-center mb-n1 elevation-0"
+                color="transparent"
+              >
+                <v-icon @click="expand = !expand">mdi-chevron-up</v-icon>
               </v-card>
             </v-card>
           </v-expand-transition>
@@ -184,8 +201,7 @@
 export default {
   name: "LayoutCustom",
 
-  components: {
-  },
+  components: {},
 
   props: {
     Title: {
@@ -225,17 +241,16 @@ export default {
     changeThemeColor(color) {
       const metaThemeColor = document.querySelector('meta[name="theme-color"]');
       if (metaThemeColor) {
-        metaThemeColor.setAttribute('content', color);
+        metaThemeColor.setAttribute("content", color);
       }
-    }
+    },
   },
 
-   mounted(){
-      this.changeThemeColor('#ffffff');
-   },
+  mounted() {
+    this.changeThemeColor("#ffffff");
+  },
 
-    created(){
-    }
+  created() {},
 };
 </script>
 
