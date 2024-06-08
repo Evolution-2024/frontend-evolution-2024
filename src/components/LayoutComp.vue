@@ -89,6 +89,12 @@
             value="competences"
             @click="pushName('competences')"
           ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-bullhorn"
+            title="Announcements"
+            value="announcements"
+            @click="pushName('announcements')"
+          ></v-list-item>
         </v-list>
 
         <div class="flex-fill d-flex flex-column justify-end">
