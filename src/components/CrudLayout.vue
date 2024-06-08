@@ -8,7 +8,7 @@
         >
           <v-icon color="white">mdi-{{ icon }}</v-icon>
           <h3 class="font-weight-bold text-white px-3 text-capitalize">
-            {{ endPoint }} View
+            {{ title ? title : endPoint }} View
           </h3>
           <v-spacer></v-spacer>
           <div class="d-flex ga-2">
@@ -38,20 +38,20 @@
             </v-btn>
           </div>
         </v-card>
-        <!-- <slot></slot> -->
+        <slot></slot>
         <v-card
           class="overflow-auto elevation-0 rounded-lg pa-2"
           color="#f2f2f2"
-          :style="`height: calc(100dvh - 80px);`"
+          :style="`height: calc(100dvh - ${heightBox}px);`"
         >
           <v-row dense>
             <v-col
               v-for="(item, index) in itemsCrud"
               :key="index"
               cols="12"
-              lg="4"
-              xl="3"
-              md="6"
+              :lg="listView ? 12 : 4"
+              :xl="listView ? 12 : 3"
+              :md="listView ? 12 : 6"
             >
               <card-custom
                 :headers="headers"
@@ -138,6 +138,10 @@ export default {
   components: { CardCustom },
 
   props: {
+    title: {
+      type: String,
+      required: false,
+    },
     endPoint: {
       type: String,
       default: "users",
@@ -145,6 +149,22 @@ export default {
     icon: {
       type: String,
       default: "home",
+    },
+    heightBox: {
+      type: Number,
+      default: 80,
+    },
+    crudFilter: {
+      type: String,
+      required: false,
+    },
+    crudDetail: {
+      type: String,
+      required: false,
+    },
+    listView: {
+      type: Boolean,
+      default: false,
     },
     entityProperty: {
       type: Object,
@@ -199,7 +219,11 @@ export default {
     async getAll() {
       this.loadingCrud = true;
       try {
-        const response = await this.$axios3.get(`/${this.endPoint}?size=100`);
+        const response = await this.$axios3.get(
+          `/${this.endPoint}${
+            this.crudDetail ? `?${this.crudFilter}=${this.crudDetail}&` : "?"
+          }size=100`
+        );
         this.itemsCrud = response.data.resource;
         console.log(`get - /${this.endPoint}`, this.itemsCrud);
         this.loadingCrud = false;
@@ -227,14 +251,22 @@ export default {
       this.onEdit = true;
       this.dialogCrud = true;
       let sampleData = this.itemsCrud.find((objeto) => objeto.id === itemId);
+      console.log("this.entityProperty--> 1", this.entityProperty);
       this.cleanProperty(this.entityProperty);
       this.sameProperties(this.entityProperty, sampleData);
+      console.log("this.entityProperty--> 2", this.entityProperty);
+      console.log("sampleData--> ", sampleData);
+      console.log("this.entityProperty--> 3", this.entityProperty);
     },
     async postRegisterUpdate() {
       const { valid } = await this.$refs.form.validate();
 
       if (valid) {
         this.loadingCrud = true;
+        // if (!this.onEdit) {
+        //   this.entityProperty[this.crudFilter] = this.crudDetail;
+        // }
+        // this.$emit("add", this.entityProperty.id);
         try {
           const response = await this.$axios3[this.onEdit ? "put" : "post"](
             `/${this.endPoint}`,
@@ -255,7 +287,10 @@ export default {
     // TODO ------------------------ LOOK ------------------------
     detailItem(itemId) {
       setTimeout(() => {
-        this.$router.push({ name: `${this.endPoint}-details`, params: { id: itemId } });
+        this.$router.push({
+          name: `${this.endPoint}-details`,
+          params: { id: itemId },
+        });
       }, 150);
     },
   },

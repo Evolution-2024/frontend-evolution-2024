@@ -8,7 +8,7 @@
     >
       <div class="pa-4 h-100">
         <h3 class="d-flex mb-2">
-          {{ entityProperty.name }}
+          {{ entityProperty.name ? entityProperty.name : entityProperty.title }}
           <v-spacer></v-spacer>
           <v-icon>mdi-book-open-variant</v-icon>
         </h3>
@@ -109,9 +109,6 @@ export default {
   computed: {},
 
   methods: {
-    logCard() {
-      console.log("SAMPLE LOG --->", this.Title);
-    },
     itemDetail() {
       this.$emit("detail", this.entityProperty.id);
     },

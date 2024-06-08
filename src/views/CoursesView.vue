@@ -3,6 +3,7 @@
     endPoint="courses"
     icon="book-open-variant"
     :entity-property="entityProperty"
+    :headers="headers"
   >
     <template #form>
       <v-text-field
@@ -26,14 +27,15 @@
         clearable
         class="pb-3"
         required
-        ></v-textarea>
-        <v-autocomplete
+      ></v-textarea>
+      <v-autocomplete
         density="compact"
         variant="outlined"
         v-model="entityProperty.competences"
         :loading="loadingSelect"
         :items="competences"
         item-title="name"
+        return-object
         @focus="getAllCompetences('competences')"
         label="Competences"
         multiple
@@ -64,6 +66,7 @@ export default {
     CrudLayout;
     return {
       nameCourseRules: [(v) => !!v || "Required"],
+      headers: [{ text: "Descripción", value: "description" }],
       entityProperty: {
         id: "",
         name: "",
@@ -79,8 +82,8 @@ export default {
       this.loadingSelect = true;
       try {
         const response = await this.$axios3.get(`/${endPoint}?size=100`);
-          this.loadingSelect = false;
-          
+        this.loadingSelect = false;
+
         this.competences = response.data.resource;
         console.log(`get - /${endPoint}`, this.competences);
       } catch (error) {
