@@ -1,5 +1,5 @@
 <template>
-  <layout-comp>
+  <crud-layout>
     <div class="d-flex flex-column ga-2">
       <v-card
         class="elevation-0 bg-primary pa-3 rounded-lg d-flex align-center"
@@ -7,12 +7,9 @@
         <v-icon color="white">mdi-view-dashboard</v-icon>
         <h3 class="font-weight-bold text-white px-3">Dashboard</h3>
         <v-spacer></v-spacer>
-        <!-- <v-btn variant="outlined" density="comfortable" color="white"
-          >SAMPLE</v-btn
-        > -->
       </v-card>
-      <v-container class="elevation-0">
-        <v-row>
+      <v-container class="elevation-0 pa-0">
+        <v-row dense>
           <v-col class="" cols="12" md="7">
             <v-card class="pa-3 d-flex flex-column ga-2 elevation-0 rounded-lg" color="#f9f9f9">
               <apexchart
@@ -100,17 +97,17 @@
         labore consectetur magnam.
       </v-card>
     </template>
-  </layout-comp>
+  </crud-layout>
 </template>
 
 <script>
 // @ is an alias to /src
-import LayoutComp from "@/components/LayoutComp.vue";
+import CrudLayout from "@/components/CrudLayout.vue";
 
 export default {
   name: "HomeView",
   components: {
-    LayoutComp,
+    CrudLayout,
   },
   data() {
     return {

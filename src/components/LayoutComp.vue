@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="rounded rounded-md">
+  <v-layout class="rounded-lg">
     <v-navigation-drawer
       floating
       v-model="drawer"
@@ -100,21 +100,11 @@
       </v-card>
     </v-navigation-drawer>
 
-    <v-navigation-drawer
-      location="right"
-      floating
-      class="mx-2 py-2 d-none d-lg-flex"
-    >
-      <v-card class="pa-2 rounded-lg h-100 elevation-0" color="#f2f2f2">
-        <slot name="rightarea"> </slot>
-      </v-card>
-    </v-navigation-drawer>
-
     <v-main
-      class="d-flex align-center justify-center"
+      class="d-flex"
       :class="`drawer_main${rail ? '_close' : '_open'}`"
     >
-      <div class="mr-2 py-2 px-4 px-md-2 w-100">
+      <div class="w-100">
         <v-card
           class="d-flex flex-column d-sm-none w-100 pa-3 pt-4 rounded-lg mb-2 elevation-0"
           :color="!expand ? '':'#f2f2f2'"
@@ -191,12 +181,10 @@
 </template>
 
 <script>
-// import ChipCustom from '@/components/ChipCustom.vue'
 export default {
   name: "LayoutCustom",
 
   components: {
-    // ChipCustom,
   },
 
   props: {
@@ -213,12 +201,6 @@ export default {
     drawer: true,
     rail: false,
   }),
-
-  //   watch:{
-  //     dataLayout(newVal, oldVal){
-  //         console.log('NEW VAL --->', newVal);
-  //     }
-  //   },
 
   computed: {},
 
