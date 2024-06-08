@@ -84,6 +84,7 @@ export default {
         name: "",
         description: "",
         gradeId: "",
+        id: "",
       },
       grades: [
         {

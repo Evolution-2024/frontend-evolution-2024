@@ -1,5 +1,5 @@
 <template>
-  <crud-layout>
+  <crud-layout title="Dashboard">
     <div class="d-flex flex-column ga-2">
       <v-card
         class="elevation-0 bg-primary pa-3 rounded-lg d-flex align-center"
