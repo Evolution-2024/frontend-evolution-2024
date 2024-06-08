@@ -4,7 +4,7 @@
       <div class="d-flex flex-column ga-3 py-2 mr-0 mr-md-2 px-4 rounded-xl">
         <v-card
           class="elevation-0 bg-primary rounded-lg d-flex align-center position-sticky pa-3"
-          :loadin="loadingCrud"
+          :loading="loadingCrud"
         >
           <v-icon color="white">mdi-{{ icon }}</v-icon>
           <h3 class="font-weight-bold text-white px-3 text-capitalize">
@@ -17,6 +17,7 @@
               variant="tonal"
               density="comfortable"
               color="white"
+              class="font-weight-bold"
               @click="getAll"
               :loading="loadingCrud"
             >
@@ -27,13 +28,13 @@
               slim
               variant="tonal"
               density="comfortable"
-              class=""
+              class="font-weight-bold"
               color="white"
               @click="openDialog"
               :loading="loadingCrud"
             >
               <p class="d-none d-md-flex">Register</p>
-              <v-icon class="ml-0 ml-md-1">mdi-pencil</v-icon>
+              <v-icon class="ml-0 ml-md-1">mdi-plus</v-icon>
             </v-btn>
           </div>
         </v-card>
@@ -51,7 +52,7 @@
               lg="4"
               md="6"
             >
-              <card-custom :entityProperty="item"></card-custom>
+              <card-custom :entityProperty="item" @delete="logItem"></card-custom>
             </v-col>
           </v-row>
         </v-card>
@@ -84,7 +85,7 @@
                 ipsam atque. Unde eius maiores rem laborum!
               </p>
             </v-alert>
-            <v-form ref="form" class="pt-3 w-100 rounded-lg">
+            <v-form ref="form" class="pt-3 w-100 rounded-lg" :disabled="loadingCrud">
               <slot name="form"></slot>
             </v-form>
             <v-divider></v-divider>
@@ -153,6 +154,9 @@ export default {
   computed: {},
 
   methods: {
+    logItem(item){
+      console.log('deteleLog -> ',item);
+    },
     openDialog() {
       this.dialogCrud = true;
     },
