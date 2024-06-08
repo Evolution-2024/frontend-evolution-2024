@@ -36,17 +36,39 @@
                 class="d-flex ga-3 transition-fast-in-fast-out v-card--reveal bg-white"
                 style="height: 100%"
               >
-                <v-btn size="small" variant="tonal" color="warning" icon @click="itemEdit">
-                  <v-icon>mdi-pencil</v-icon>
+                <v-btn
+                  size="small"
+                  variant="tonal"
+                  color="error"
+                  icon
+                  @click="itemDelete"
+                >
+                  <v-icon>mdi-trash-can</v-icon>
                   <v-tooltip activator="parent" location="top"
-                    >Edit</v-tooltip
+                    >Delete</v-tooltip
                   >
-                  </v-btn>
-                  <v-btn size="small" variant="tonal" color="error" icon @click="itemDelete">
-                    <v-icon>mdi-trash-can</v-icon>
-                    <v-tooltip activator="parent" location="top"
-                      >Delete</v-tooltip
-                    >
+                </v-btn>
+                <v-btn
+                  size="small"
+                  variant="tonal"
+                  color="warning"
+                  icon
+                  @click="itemEdit"
+                >
+                  <v-icon>mdi-pencil</v-icon>
+                  <v-tooltip activator="parent" location="top">Edit</v-tooltip>
+                </v-btn>
+                <v-btn
+                  size="small"
+                  variant="tonal"
+                  color="info"
+                  icon
+                  @click="itemDetail"
+                >
+                  <v-icon>mdi-eye</v-icon>
+                  <v-tooltip activator="parent" location="top"
+                    >Detail</v-tooltip
+                  >
                 </v-btn>
               </div>
             </v-expand-transition>
@@ -82,11 +104,7 @@ export default {
     dataCard: false,
   }),
 
-  //   watch:{
-  //     dataCard(newVal, oldVal){
-  //         console.log('NEW VAL --->', newVal);
-  //     }
-  //   },
+  watch: {},
 
   computed: {},
 
@@ -94,8 +112,8 @@ export default {
     logCard() {
       console.log("SAMPLE LOG --->", this.Title);
     },
-    viewDetalle() {
-      this.$emit("detalle", this.entityProperty.id);
+    itemDetail() {
+      this.$emit("detail", this.entityProperty.id);
     },
     itemDelete() {
       this.$emit("delete", this.entityProperty.id);
@@ -105,12 +123,9 @@ export default {
     },
   },
 
-  //  mounted(){
-  //    this.logCard();
-  //  },
+  mounted() {},
 
-  //   created(){
-  //   }
+  created() {},
 };
 </script>
 

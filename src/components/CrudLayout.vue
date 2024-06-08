@@ -58,6 +58,7 @@
                 :entityProperty="item"
                 @delete="deleteItem"
                 @edit="editItem"
+                @detail="detailItem"
               ></card-custom>
             </v-col>
           </v-row>
@@ -253,12 +254,10 @@ export default {
       }
     },
     // TODO ------------------------ LOOK ------------------------
-    goToCourseViewDetail(courseId) {
-      this.loadCard = courseId;
+    detailItem(itemId) {
       setTimeout(() => {
-        this.loadCard = null;
-        this.$router.push({ name: "course-details", params: { id: courseId } });
-      }, 350);
+        this.$router.push({ name: `${this.endPoint}-details`, params: { id: itemId } });
+      }, 150);
     },
   },
 

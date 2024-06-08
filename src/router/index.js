@@ -29,7 +29,7 @@ const routes = [
   },
   {
     path: '/courses/:id',
-    name: 'course-details',
+    name: 'courses-details',
     component: () => import('../views/CourseDetailsView.vue')
   },
   {
