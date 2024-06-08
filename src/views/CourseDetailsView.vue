@@ -2,36 +2,33 @@
   <crud-layout
     title="Detail Course"
     endPoint="topics"
+    filters
     :crud-detail="courseId"
     crud-filter="courseId"
     icon="book-open"
     list-view
     :entity-property="entityProperty"
-    :height-box="340"
+    :height-box="292"
   >
     <div class="d-flex flex-column ga-2">
-      <v-card class="elevation-0">
-        <h1>{{ course.name }}</h1>
+      <v-card class="elevation-0" :loading="loading" height="200">
+        <h1>{{ entityDetail.name }}</h1>
         <p class="text-caption pb-3">Descripcion</p>
         <p class="text-justify">
-          {{ course.description }} || Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Fugit ab recusandae magnam in laboriosam
-          consequatur, culpa iusto autem esse voluptatem quam inventore
-          officiis, adipisci porro. Totam voluptas quidem veritatis officia!
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit ab
-          recusandae magnam in laboriosam consequatur, culpa iusto autem esse
-          voluptatem quam inventore officiis, adipisci porro. Totam voluptas
-          quidem veritatis officia! Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Fugit ab recusandae magnam in laboriosam
-          consequatur, culpa iusto autem esse voluptatem quam inventore
-          officiis, adipisci porro. Totam voluptas quidem veritatis officia!
+          {{ entityDetail.description }} || Lorem ipsum dolor sit amet
+          consectetur adipisicing elit. Ex autem voluptatem corporis numquam nam
+          voluptates alias veniam. Debitis quisquam illo doloribus, facilis
+          pariatur iure ipsam amet incidunt doloremque, dolor voluptatem.
+          consectetur adipisicing elit.
         </p>
       </v-card>
     </div>
+    <template #upList>
+      <h2 class="pa-2">Material Semanal</h2>
+    </template>
     <template #form>
       <v-text-field
         v-model="entityProperty.title"
-        :rules="nameCourseRules"
         label="Title"
         density="compact"
         variant="outlined"
@@ -42,7 +39,6 @@
       ></v-text-field>
       <v-text-field
         v-model="entityProperty.description"
-        :rules="nameCourseRules"
         label="Description"
         density="compact"
         variant="outlined"
@@ -53,7 +49,6 @@
       ></v-text-field>
       <v-textarea
         v-model="entityProperty.file"
-        :rules="nameCourseRules"
         label="File"
         density="compact"
         variant="outlined"
@@ -101,35 +96,45 @@ export default {
   },
   data() {
     return {
-      courses: [],
       loading: false,
-      dialog: false,
       amenities: [1, 4],
-      nameCourse: "",
-      descriptionCourse: "",
-      fileCourse: "",
+
       courseId: null,
       materials: [],
-      course: {
+      entityDetail: {
         id: null,
         name: null,
         description: null,
+        competences: null,
       },
       entityProperty: {
-        title: '',
-        description: '',
-        file: '',
-        id: '',
-        courseId: this.courseId,
+        title: "",
+        description: "",
+        file: "",
+        id: "",
+        courseId: "",
       },
     };
   },
   methods: {
-    
+    async getItemId(endPoint) {
+      this.loading = true;
+      try {
+        const response = await this.$axios3.get(
+          `/${endPoint}?id=${this.courseId}`
+        );
+        this.entityDetail = response.data.resource[0];
+        console.log(`get - /${endPoint}`, this.entityDetail);
+        this.loading = false;
+      } catch (error) {
+        console.error(`Hubo un error al obtener /${endPoint}:`, error);
+      }
+    },
   },
   mounted() {},
   async created() {
-    this.courseId = this.$route.params.id;
+    this.courseId = await this.$route.params.id;
+    this.getItemId("courses");
   },
 };
 </script>

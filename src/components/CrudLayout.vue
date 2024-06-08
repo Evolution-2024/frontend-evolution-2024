@@ -44,7 +44,8 @@
           color="#f2f2f2"
           :style="`height: calc(100dvh - ${heightBox}px);`"
         >
-          <v-row dense>
+          <slot name="upList"></slot>
+          <v-row dense v-if="itemsCrud.length != 0">
             <v-col
               v-for="(item, index) in itemsCrud"
               :key="index"
@@ -62,6 +63,12 @@
               ></card-custom>
             </v-col>
           </v-row>
+          <div
+            v-else
+            class="text-center h-75 d-flex flex-column justify-center align-center"
+          >
+            No existe elementos
+          </div>
         </v-card>
         <v-dialog v-model="dialogCrud" max-width="600">
           <v-card class="pa-6 rounded-lg">
@@ -166,6 +173,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    filters: {
+      type: Boolean,
+      default: false,
+    },
     entityProperty: {
       type: Object,
       required: true,
@@ -221,7 +232,7 @@ export default {
       try {
         const response = await this.$axios3.get(
           `/${this.endPoint}${
-            this.crudDetail ? `?${this.crudFilter}=${this.crudDetail}&` : "?"
+            this.filters ? `?${this.crudFilter}=${this.crudDetail}&` : "?"
           }size=100`
         );
         this.itemsCrud = response.data.resource;
@@ -263,10 +274,6 @@ export default {
 
       if (valid) {
         this.loadingCrud = true;
-        // if (!this.onEdit) {
-        //   this.entityProperty[this.crudFilter] = this.crudDetail;
-        // }
-        // this.$emit("add", this.entityProperty.id);
         try {
           const response = await this.$axios3[this.onEdit ? "put" : "post"](
             `/${this.endPoint}`,
@@ -296,7 +303,13 @@ export default {
   },
 
   mounted() {
-    this.getAll();
+    if (this.filters) {
+      setTimeout(() => {
+        this.getAll();
+      }, 250);
+    } else {
+      this.getAll();
+    }
   },
 
   created() {},
