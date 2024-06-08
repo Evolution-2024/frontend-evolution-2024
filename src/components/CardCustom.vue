@@ -7,8 +7,8 @@
       :elevation="isHovering ? 24 : 0"
     >
       <div class="pa-4 h-100">
-        <h3 class="d-flex">
-          {{ entityProperty.name }} - 00{{ entityProperty.id }}
+        <h3 class="d-flex mb-2">
+          {{ entityProperty.name }}
           <v-spacer></v-spacer>
           <v-icon>mdi-book-open-variant</v-icon>
         </h3>
@@ -19,12 +19,17 @@
           }"
         >
           <v-card v-bind="innerHoverProps" tile class="h-100 elevation-0">
-            <div class="">
-              <p class="text-caption">Descripcion:</p>
-              {{ entityProperty.description }} || Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Repudiandae possimus harum molestiae
-              voluptatum velit.
-            </div>
+            <p
+              v-for="(sample, index) in headers"
+              :key="index"
+              class="text-justify d-inline-block text-truncate"
+              :class="index + 1 == headers.length ? 'pb-3' : ''"
+              style="max-width: 100%"
+            >
+              <span class="font-weight-bold text-capitalize pr-2"
+                >{{ sample.text }}:</span
+              >{{ entityProperty[sample.value] }}
+            </p>
             <v-expand-transition>
               <div
                 v-if="isInnerHovering"
@@ -54,11 +59,15 @@ export default {
   components: {
     // ChipCustom,
   },
-  emits: ['delete'],
+  emits: ["delete", "edit"],
 
   props: {
     entityProperty: {
       type: Object,
+      required: true,
+    },
+    headers: {
+      type: Array,
       required: true,
     },
   },

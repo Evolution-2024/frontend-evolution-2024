@@ -50,16 +50,24 @@
               :key="index"
               cols="12"
               lg="4"
+              xl="3"
               md="6"
             >
-              <card-custom :entityProperty="item" @delete="logItem"></card-custom>
+              <card-custom
+                :headers="headers"
+                :entityProperty="item"
+                @delete="deleteItem"
+                @edit="editItem"
+              ></card-custom>
             </v-col>
           </v-row>
         </v-card>
         <v-dialog v-model="dialogCrud" max-width="600">
           <v-card class="pa-6 rounded-lg">
             <div class="d-flex align-center">
-              <h3 class="text-capitalize">Register: {{ endPoint }}</h3>
+              <h3 class="text-capitalize">
+                {{ onEdit ? "Update" : "Register" }}: {{ endPoint }}
+              </h3>
               <v-spacer></v-spacer>
               <v-btn
                 text
@@ -85,19 +93,23 @@
                 ipsam atque. Unde eius maiores rem laborum!
               </p>
             </v-alert>
-            <v-form ref="form" class="pt-3 w-100 rounded-lg" :disabled="loadingCrud">
+            <v-form
+              ref="form"
+              class="pt-3 w-100 rounded-lg"
+              :disabled="loadingCrud"
+            >
               <slot name="form"></slot>
             </v-form>
             <v-divider></v-divider>
             <v-card-actions>
-              <v-btn variant="text" @click="cleanDialog"> Limpiar </v-btn>
+              <v-btn variant="text" @click="cleanDialog"> Clean </v-btn>
               <v-btn
                 variant="tonal"
                 color="primary"
-                @click="postRegister"
+                @click="postRegisterUpdate"
                 :loading="loadingCrud"
               >
-                Registrar
+                {{ onEdit ? "Update" : "Register" }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -137,11 +149,16 @@ export default {
       type: Object,
       required: true,
     },
+    headers: {
+      type: Array,
+      default: () => [{ text: "Descripción", value: "description" }],
+    },
   },
 
   data: () => ({
     loadingCrud: false,
     dialogCrud: false,
+    onEdit: false,
     itemsCrud: [],
   }),
 
@@ -154,13 +171,25 @@ export default {
   computed: {},
 
   methods: {
-    logItem(item){
-      console.log('deteleLog -> ',item);
+    cleanProperty(objeto) {
+      for (let propiedad in objeto) {
+        objeto[propiedad] = null;
+      }
+    },
+    sameProperties(objetoDestino, objetoFuente) {
+      for (let propiedad in objetoDestino) {
+        if (Object.prototype.hasOwnProperty.call(objetoFuente, propiedad)) {
+          objetoDestino[propiedad] = objetoFuente[propiedad];
+        }
+      }
     },
     openDialog() {
+      this.onEdit = false;
       this.dialogCrud = true;
     },
     closeDialog() {
+      this.$refs.form.reset();
+      this.$refs.form.resetValidation();
       this.dialogCrud = false;
     },
     cleanDialog() {
@@ -177,20 +206,45 @@ export default {
         console.error(`Hubo un error al obtener /${this.endPoint}:`, error);
       }
     },
-    async postRegister() {
+    async deleteItem(itemId) {
+      this.loadingCrud = true;
+      try {
+        const response = await this.$axios3.delete(
+          `/${this.endPoint}/${itemId}`
+        );
+        console.log(`delete - /${this.endPoint}/${itemId}`, response);
+        this.loadingCrud = false;
+        this.getAll();
+      } catch (error) {
+        console.error(
+          `Hubo un error al realizar /${this.endPoint}/${itemId}:`,
+          error
+        );
+      }
+    },
+    editItem(itemId) {
+      this.onEdit = true;
+      this.dialogCrud = true;
+      let sampleData = this.itemsCrud.find((objeto) => objeto.id === itemId);
+      this.cleanProperty(this.entityProperty);
+      this.sameProperties(this.entityProperty, sampleData);
+      console.log(sampleData);
+    },
+    async postRegisterUpdate() {
       const { valid } = await this.$refs.form.validate();
 
       if (valid) {
         this.loadingCrud = true;
         try {
-          const response = await this.$axios3.post(
+          const response = await this.$axios3[this.onEdit ? "put" : "post"](
             `/${this.endPoint}`,
             this.entityProperty
           );
-          console.log(`post - /${this.endPoint}`, response);
+          console.log(
+            `${this.onEdit ? "put" : "post"} - /${this.endPoint}`,
+            response
+          );
           this.loadingCrud = false;
-          this.$refs.form.reset();
-          this.$refs.form.resetValidation();
           this.closeDialog();
           this.getAll();
         } catch (error) {
@@ -198,6 +252,7 @@ export default {
         }
       }
     },
+    // TODO ------------------------ LOOK ------------------------
     goToCourseViewDetail(courseId) {
       this.loadCard = courseId;
       setTimeout(() => {

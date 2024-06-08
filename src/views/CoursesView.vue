@@ -75,6 +75,7 @@ export default {
     return {
       nameCourseRules: [(v) => !!v || "Required"],
       entityProperty: {
+        id: "",
         name: "",
         description: "",
       },
