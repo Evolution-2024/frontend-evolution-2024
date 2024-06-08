@@ -4,7 +4,6 @@
     icon="book-open-variant"
     :entity-property="entityProperty"
   >
-    
     <template #form>
       <v-text-field
         v-model="entityProperty.name"
@@ -27,7 +26,19 @@
         clearable
         class="pb-3"
         required
-      ></v-textarea>
+        ></v-textarea>
+        <v-autocomplete
+        density="compact"
+        variant="outlined"
+        v-model="entityProperty.competences"
+        :loading="loadingSelect"
+        :items="competences"
+        item-title="name"
+        @focus="getAllCompetences('competences')"
+        label="Competences"
+        multiple
+      >
+      </v-autocomplete>
     </template>
     <template #rightarea>
       <v-card class="pa-2 elevation-0">
@@ -57,13 +68,26 @@ export default {
         id: "",
         name: "",
         description: "",
+        competences: [],
       },
+      loadingSelect: false,
+      competences: [],
     };
   },
   methods: {
-    
+    async getAllCompetences(endPoint) {
+      this.loadingSelect = true;
+      try {
+        const response = await this.$axios3.get(`/${endPoint}?size=100`);
+          this.loadingSelect = false;
+          
+        this.competences = response.data.resource;
+        console.log(`get - /${endPoint}`, this.competences);
+      } catch (error) {
+        console.error(`Hubo un error al obtener /${endPoint}:`, error);
+      }
+    },
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>

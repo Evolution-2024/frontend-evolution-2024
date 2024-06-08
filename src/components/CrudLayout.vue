@@ -229,7 +229,6 @@ export default {
       let sampleData = this.itemsCrud.find((objeto) => objeto.id === itemId);
       this.cleanProperty(this.entityProperty);
       this.sameProperties(this.entityProperty, sampleData);
-      console.log(sampleData);
     },
     async postRegisterUpdate() {
       const { valid } = await this.$refs.form.validate();

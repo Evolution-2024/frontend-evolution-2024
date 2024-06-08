@@ -87,7 +87,7 @@ export default {
   components: {
     // ChipCustom,
   },
-  emits: ["delete", "edit"],
+  emits: ["delete", "edit", "detail"],
 
   props: {
     entityProperty: {
