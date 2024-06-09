@@ -181,36 +181,34 @@ export default {
       localStorage.setItem("authToken", data.token); // O utiliza cookies
       localStorage.setItem("user", JSON.stringify(this.user)); // O utiliza cookies
 
-
       // Configurar el token para futuras solicitudes
       this.$axios1.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${data.token}`;
 
-
-        this.goToLogin();
-
+      this.goToLogin();
     },
 
     goToLogin() {
-        this.snackbar = true;
+      this.snackbar = true;
 
+      const redirect = this.$route.query.redirect || "/home";
       setTimeout(() => {
-        this.$router.push({ name: "home" });
+        this.$router.push(redirect);
+        // this.$router.push({ name: "home" });
       }, 550);
     },
     changeThemeColor(color) {
       const metaThemeColor = document.querySelector('meta[name="theme-color"]');
       if (metaThemeColor) {
-        metaThemeColor.setAttribute('content', color);
+        metaThemeColor.setAttribute("content", color);
       }
-    }
+    },
   },
 
   mounted() {
     this.initVanta();
-    this.changeThemeColor('#027b7b');
-
+    this.changeThemeColor("#027b7b");
   },
 
   //   created(){
