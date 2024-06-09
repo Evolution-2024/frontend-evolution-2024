@@ -69,11 +69,13 @@
       <v-snackbar
         v-model="snackbar"
         :timeout="2000"
-        color="green-accent-4"
+        :color="snackbarState ? 'green-accent-4' : 'red-accent-3'"
         rounded="lg"
         elevation="24"
       >
-        <p class="text-white">Ingreso <strong>correctamente</strong>.</p>
+        <p class="text-white">
+          {{ snackbarState ? "Ingreso correctamente" : "Datos incorrectos" }}
+        </p>
 
         <template v-slot:actions>
           <v-btn color="white" icon @click="snackbar = false">
@@ -105,6 +107,7 @@ export default {
     dataLoginView: false,
     marker: true,
     snackbar: false,
+    snackbarState: false,
     email: "",
     user: "",
     password: "",
@@ -146,6 +149,11 @@ export default {
 
       if (valid) {
         this.login();
+      } else {
+        this.$refs.form.reset();
+        this.$refs.form.resetValidation();
+        this.snackbar = true;
+        this.snackbarState = false;
       }
     },
     reset() {
@@ -167,6 +175,8 @@ export default {
         this.handleLoginResponse(response.data);
       } catch (error) {
         console.error("Error al iniciar sesión:", error);
+        this.snackbar = true;
+        this.snackbarState = false;
       }
     },
     handleLoginResponse(data) {
@@ -176,6 +186,8 @@ export default {
         email: data.email,
         roles: data.roles || [], // Manejar si roles es null
       };
+      this.snackbar = true;
+      this.snackbarState = true;
 
       // Almacenar el token de manera segura
       localStorage.setItem("authToken", data.token); // O utiliza cookies
@@ -190,8 +202,6 @@ export default {
     },
 
     goToLogin() {
-      this.snackbar = true;
-
       const redirect = this.$route.query.redirect || "/home";
       setTimeout(() => {
         this.$router.push(redirect);
