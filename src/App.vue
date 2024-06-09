@@ -2,19 +2,19 @@
   <v-app>
     <router-view v-slot="{ Component, route }">
       <component v-if="route.name === 'login'" :is="Component" />
-      <layout-comp v-else>
+      <default-layout v-else>
         <component :is="Component" />
-      </layout-comp>
+      </default-layout>
     </router-view>
   </v-app>
 </template>
 
 <script>
-import LayoutComp from "@/components/LayoutComp.vue";
+import DefaultLayout from "@/layouts/DefaultLayout.vue";
 
 export default {
   components: {
-    LayoutComp,
+    DefaultLayout,
   },
   
 }

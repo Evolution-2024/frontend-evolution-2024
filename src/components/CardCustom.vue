@@ -6,9 +6,12 @@
       v-bind="props"
       :elevation="isHovering ? 24 : 0"
     >
-      <div class="pa-4 h-100">
+      <div class="pa-4 h-100 d-flex flex-column">
         <h3 class="d-flex mb-2">
-          {{ entityProperty.name ? entityProperty.name : entityProperty.title }}
+          <span class="d-inline-block text-truncate pr-5" style="max-width: 100%">
+
+            {{ entityProperty.name ? entityProperty.name : entityProperty.title }}
+          </span>
           <v-spacer></v-spacer>
           <v-icon>mdi-book-open-variant</v-icon>
         </h3>
@@ -18,13 +21,12 @@
             props: innerHoverProps,
           }"
         >
-          <v-card v-bind="innerHoverProps" tile class="h-100 elevation-0">
+          <v-card v-bind="innerHoverProps" tile class="elevation-0 flex-fill">
             <p
               v-for="(sample, index) in headers"
               :key="index"
-              class="text-justify d-inline-block text-truncate"
-              :class="index + 1 == headers.length ? 'pb-3' : ''"
-              style="max-width: 100%"
+              class="w-100 d-inline-block text-truncate"
+              :class="index + 1 == headers.length ? 'pb-0' : ''"
             >
               <span class="font-weight-bold text-capitalize pr-2"
                 >{{ sample.text }}:</span

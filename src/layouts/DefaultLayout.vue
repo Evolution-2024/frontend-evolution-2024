@@ -1,7 +1,5 @@
 <template>
-  <v-layout class="rounded rounded-md">
-    <!-- <v-app-bar color="surface-variant" title="Application bar"></v-app-bar> -->
-
+  <v-layout class="rounded-lg">
     <v-navigation-drawer
       floating
       v-model="drawer"
@@ -74,11 +72,28 @@
             @click="pushName('courses')"
           ></v-list-item>
           <v-list-item
-            disabled
             prepend-icon="mdi-account-group-outline"
             title="Users"
             value="users"
-            @click="pushName('')"
+            @click="pushName('users')"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-google-classroom"
+            title="Sections"
+            value="sections"
+            @click="pushName('sections')"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-home"
+            title="Competences"
+            value="competences"
+            @click="pushName('competences')"
+          ></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-bullhorn"
+            title="Announcements"
+            value="announcements"
+            @click="pushName('announcements')"
           ></v-list-item>
         </v-list>
 
@@ -97,21 +112,91 @@
       </v-card>
     </v-navigation-drawer>
 
-    <v-navigation-drawer
-      location="right"
-      floating
-      class="mx-2 py-2 d-none d-lg-flex"
-    >
-      <v-card class="pa-2 rounded-lg h-100 elevation-0" color="#f2f2f2">
-        <slot name="rightarea"> </slot>
-      </v-card>
-    </v-navigation-drawer>
+    <v-main class="d-flex" :class="`drawer_main${rail ? '_close' : '_open'}`">
+      <div class="w-100">
+        <v-card
+          class="d-flex flex-column d-sm-none w-100 pa-3 pt-4 rounded-lg mb-2 elevation-0"
+          :color="!expand ? '' : '#f2f2f2'"
+        >
+          <img
+            src="/evolution_logo.png"
+            alt=""
+            srcset=""
+            class="mx-auto image-logo"
+            style="width: auto; height: 25px"
+            @click="expand = !expand"
+          />
+          <div class="ondas">
+            <div class="lds-ripple">
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+          <v-expand-transition>
+            <v-card
+              v-show="expand"
+              class="pt-4 px-2 elevation-0"
+              color="transparent"
+            >
+              <h4 class="text-center">Evolution</h4>
+              <v-list density="compact" bg-color="transparent">
+                <v-list-item
+                  title="Dashboard"
+                  class="text-center"
+                  density="compact"
+                  value="dashboard"
+                  @click="pushName('home')"
+                ></v-list-item>
 
-    <v-main
-      class="d-flex align-center justify-center"
-      :class="`drawer_main${rail ? '_close' : '_open'}`"
-    >
-      <div class="mr-2 py-2 px-4 px-md-2 w-100">
+                <v-list-item
+                  title="Courses"
+                  class="text-center"
+                  density="compact"
+                  value="courses"
+                  @click="pushName('courses')"
+                ></v-list-item>
+                <v-list-item
+                  title="Users"
+                  class="text-center"
+                  density="compact"
+                  value="users"
+                  @click="pushName('users')"
+                ></v-list-item>
+                <v-list-item
+                  title="Sections"
+                  class="text-center"
+                  density="compact"
+                  value="sections"
+                  @click="pushName('sections')"
+                ></v-list-item>
+                <v-list-item
+                  title="Competences"
+                  class="text-center"
+                  density="compact"
+                  value="competences"
+                  @click="pushName('competences')"
+                ></v-list-item>
+                <v-list-item
+                  class="text-center font-weight-black"
+                  density="compact"
+                  value="sections"
+                  @click="logOut"
+                >
+                  <v-list-item-title>
+                    <p class="font-weight-black">Log Out</p>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+              <v-card
+                class="d-flex justify-center mb-n1 elevation-0"
+                color="transparent"
+              >
+                <v-icon @click="expand = !expand">mdi-chevron-up</v-icon>
+              </v-card>
+            </v-card>
+          </v-expand-transition>
+        </v-card>
+
         <slot></slot>
       </div>
     </v-main>
@@ -119,13 +204,10 @@
 </template>
 
 <script>
-// import ChipCustom from '@/components/ChipCustom.vue'
 export default {
   name: "LayoutCustom",
 
-  components: {
-    // ChipCustom,
-  },
+  components: {},
 
   props: {
     Title: {
@@ -136,15 +218,11 @@ export default {
 
   data: () => ({
     dataLayout: false,
+    expand: false,
+
     drawer: true,
     rail: false,
   }),
-
-  //   watch:{
-  //     dataLayout(newVal, oldVal){
-  //         console.log('NEW VAL --->', newVal);
-  //     }
-  //   },
 
   computed: {},
 
@@ -166,14 +244,19 @@ export default {
     pushName(nameString) {
       this.$router.push({ name: nameString });
     },
+    changeThemeColor(color) {
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute("content", color);
+      }
+    },
   },
 
-  //  mounted(){
-  //    this.logLayout();
-  //  },
+  mounted() {
+    this.changeThemeColor("#ffffff");
+  },
 
-  //   created(){
-  //   }
+  created() {},
 };
 </script>
 
@@ -188,6 +271,69 @@ export default {
   padding-left: 64px;
   @media (max-width: 600px) {
     padding-left: 0;
+  }
+}
+.image-logo {
+  position: relative;
+}
+
+.ondas {
+  position: absolute;
+  /* transform: translate(-50%, -50%); */
+  transform: translateX(-50%);
+  left: 50%;
+  top: 0%;
+  z-index: -1;
+}
+
+.lds-ripple,
+.lds-ripple div {
+  box-sizing: border-box;
+}
+.lds-ripple {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+.lds-ripple div {
+  position: absolute;
+  border: 2px solid #3fc4c0;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -1s;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 18px;
+    left: 18px;
+    width: 4px;
+    height: 4px;
+    opacity: 0;
+  }
+  4.9% {
+    top: 18px;
+    left: 18px;
+    width: 4px;
+    height: 4px;
+    opacity: 0;
+  }
+  5% {
+    top: 18px;
+    left: 18px;
+    width: 4px;
+    height: 4px;
+    opacity: 1;
+  }
+  100% {
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    opacity: 0;
   }
 }
 </style>

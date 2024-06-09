@@ -43,7 +43,7 @@
   
   <script>
   // @ is an alias to /src
-  import CrudLayout from "@/components/CrudLayout.vue";
+  import CrudLayout from "@/layouts/CrudLayout.vue";
   
   export default {
     name: "CoursesView",

@@ -64,7 +64,7 @@
 
 <script>
 // @ is an alias to /src
-import CrudLayout from "@/components/CrudLayout.vue";
+import CrudLayout from "@/layouts/CrudLayout.vue";
 
 export default {
   name: "CoursesView",
@@ -77,7 +77,7 @@ export default {
       nameCourseRules: [(v) => !!v || "Required"],
       headers: [
         { text: "Code", value: "code" },
-        { text: "Descripción", value: "description" },
+        { text: "Description", value: "description" },
       ],
       entityProperty: {
         code: "",
