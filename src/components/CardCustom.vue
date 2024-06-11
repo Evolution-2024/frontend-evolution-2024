@@ -22,6 +22,7 @@
           <v-icon>mdi-book-open-variant</v-icon>
         </h3>
         <v-hover
+          class=""
           v-slot:default="{
             isHovering: isInnerHovering,
             props: innerHoverProps,
@@ -30,7 +31,7 @@
           <v-card
             v-bind="innerHoverProps"
             tile
-            class="elevation-0 flex-fill d-flex flex-column"
+            class="d-none d-sm-flex elevation-0 flex-fill flex-column"
             :class="alignEnd ? 'align-end justify-end' : ''"
           >
             <p
@@ -90,6 +91,65 @@
             </v-expand-transition>
           </v-card>
         </v-hover>
+        <v-card
+          tile
+          class="elevation-0 flex-fill d-flex d-sm-none flex-column"
+          :class="alignEnd ? 'align-end justify-end' : ''"
+          @click="clickMobile"
+          :ripple="false"
+        >
+          <p
+            v-for="(sample, index) in headers"
+            :key="index"
+            class="w-100 d-inline-block text-truncate"
+            :class="index + 1 == headers.length ? 'pb-0' : ''"
+          >
+            <span class="font-weight-bold text-capitalize pr-2"
+              >{{ sample.text }}:</span
+            >{{ entityProperty[sample.value] }}
+          </p>
+          <v-expand-transition v-if="!hideHover">
+            <div
+              v-if="showDataCard"
+              class="d-flex ga-3 transition-fast-in-fast-out v-card--reveal rounded-lg"
+              style="height: 100%"
+            >
+              <v-btn
+                v-if="!hideDelete"
+                size="small"
+                variant="tonal"
+                color="error"
+                icon
+                @click="itemDelete"
+              >
+                <v-icon>mdi-trash-can</v-icon>
+                <v-tooltip activator="parent" location="top">Delete</v-tooltip>
+              </v-btn>
+              <v-btn
+                v-if="!hideEdit"
+                size="small"
+                variant="tonal"
+                color="warning"
+                icon
+                @click="itemEdit"
+              >
+                <v-icon>mdi-pencil</v-icon>
+                <v-tooltip activator="parent" location="top">Edit</v-tooltip>
+              </v-btn>
+              <v-btn
+                v-if="!hideDetail"
+                size="small"
+                variant="tonal"
+                color="info"
+                icon
+                @click="itemDetail"
+              >
+                <v-icon>mdi-eye</v-icon>
+                <v-tooltip activator="parent" location="top">Detail</v-tooltip>
+              </v-btn>
+            </div>
+          </v-expand-transition>
+        </v-card>
       </div>
     </v-card>
   </v-hover>
@@ -142,6 +202,7 @@ export default {
 
   data: () => ({
     dataCard: false,
+    showDataCard: false,
   }),
 
   watch: {},
@@ -157,6 +218,12 @@ export default {
     },
     itemEdit() {
       this.$emit("edit", this.entityProperty.id);
+    },
+    clickMobile() {
+      this.showDataCard = !this.showDataCard;
+      setTimeout(() => {
+        this.showDataCard = false;
+      }, 750);
     },
   },
 

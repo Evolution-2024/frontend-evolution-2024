@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column ga-2 py-2 pl-2 mx-2">
+  <div class="d-flex flex-column ga-2 py-2 pl-0 pl-sm-2 mx-2">
     <v-card class="elevation-0 bg-primary pa-3 rounded-lg d-flex align-center">
       <v-icon color="white">mdi-view-dashboard</v-icon>
       <h3 class="font-weight-bold text-white px-3">Dashboard</h3>

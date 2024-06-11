@@ -62,7 +62,11 @@
             <div class="d-flex justify-space-between">
               <span class="font-weight-bold text-uppercase"> ROL: </span>
               <div class="text-capitalize">
-                <span v-for="(roleName, index) in userRoleNames" :key="index" class="">
+                <span
+                  v-for="(roleName, index) in userRoleNames"
+                  :key="index"
+                  class=""
+                >
                   {{ index != 0 ? "," : "" }} {{ roleName }}
                 </span>
               </div>
@@ -75,41 +79,11 @@
         <v-list density="compact" nav>
           <v-list-subheader v-show="!rail">MODULOS</v-list-subheader>
           <v-list-item
-            prepend-icon="mdi-view-dashboard"
-            title="Dashboard"
-            value="dashboard"
-            @click="pushName('home')"
-          ></v-list-item>
-
-          <v-list-item
-            prepend-icon="mdi-book-open-variant"
-            title="Courses"
-            value="courses"
-            @click="pushName('courses')"
-          ></v-list-item>
-          <v-list-item
-            prepend-icon="mdi-account-group-outline"
-            title="Users"
-            value="users"
-            @click="pushName('users')"
-          ></v-list-item>
-          <v-list-item
-            prepend-icon="mdi-google-classroom"
-            title="Sections"
-            value="sections"
-            @click="pushName('sections')"
-          ></v-list-item>
-          <v-list-item
-            prepend-icon="mdi-home"
-            title="Competences"
-            value="competences"
-            @click="pushName('competences')"
-          ></v-list-item>
-          <v-list-item
-            prepend-icon="mdi-bullhorn"
-            title="Announcements"
-            value="announcements"
-            @click="pushName('announcements')"
+            v-for="item in menuItems"
+            :key="item.value"
+            :prepend-icon="item.icon"
+            :title="item.title"
+            @click="pushName(item.route)"
           ></v-list-item>
         </v-list>
 
@@ -235,7 +209,44 @@ export default {
   data: () => ({
     dataLayout: false,
     expand: false,
-
+    menuItems: [
+      {
+        icon: "mdi-view-dashboard",
+        title: "Dashboard",
+        value: "dashboard",
+        route: "home",
+      },
+      {
+        icon: "mdi-book-open-variant",
+        title: "Courses",
+        value: "courses",
+        route: "courses",
+      },
+      {
+        icon: "mdi-account-group-outline",
+        title: "Users",
+        value: "users",
+        route: "users",
+      },
+      {
+        icon: "mdi-google-classroom",
+        title: "Sections",
+        value: "sections",
+        route: "sections",
+      },
+      {
+        icon: "mdi-home",
+        title: "Competences",
+        value: "competences",
+        route: "competences",
+      },
+      {
+        icon: "mdi-bullhorn",
+        title: "Announcements",
+        value: "announcements",
+        route: "announcements",
+      },
+    ],
     drawer: true,
     rail: false,
     roles: [
