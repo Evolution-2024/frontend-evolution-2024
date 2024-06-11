@@ -45,7 +45,7 @@
           :style="`height: calc(100dvh - ${heightBox}px);`"
         >
           <slot name="upList"></slot>
-          <v-row dense v-if="itemsCrud.length != 0">
+          <v-row dense v-if="lengthCrud">
             <v-col
               v-for="(item, index) in itemsCrud"
               :key="index"
@@ -58,6 +58,11 @@
                 :headers="headers"
                 :entityProperty="item"
                 :hide-detail="hideDetail"
+                :hide-edit="hideEdit"
+                :hide-hover="hideHover"
+                :hide-delete="hideDelete"
+                :defaultTitle="defaultTitle"
+                :alignEnd="alignEnd"
                 @delete="deleteItem"
                 @edit="editItem"
                 @detail="detailItem"
@@ -142,6 +147,7 @@ import CardCustom from "@/components/CardCustom.vue";
 
 export default {
   name: "LayoutCustom",
+  emits: ["edit"],
 
   components: { CardCustom },
 
@@ -152,7 +158,7 @@ export default {
     },
     endPoint: {
       type: String,
-      default: "users",
+      default: "courses",
     },
     icon: {
       type: String,
@@ -186,13 +192,37 @@ export default {
       type: Object,
       required: true,
     },
+    hideHover: {
+      type: Boolean,
+      default: false,
+    },
     hideDetail: {
+      type: Boolean,
+      default: false,
+    },
+    hideDelete: {
+      type: Boolean,
+      default: false,
+    },
+    hideEdit: {
       type: Boolean,
       default: false,
     },
     headers: {
       type: Array,
-      default: () => [{ text: "Descripción", value: "description" }],
+      default: () => [{ text: "id", value: "id" }],
+    },
+    defaultTitle: {
+      type: String,
+      default: "name",
+    },
+    postEp: {
+      type: String,
+      required: false,
+    },
+    alignEnd: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -209,7 +239,11 @@ export default {
     // }
   },
 
-  computed: {},
+  computed: {
+    lengthCrud() {
+      return this.itemsCrud ? this.itemsCrud.length : 0;
+    },
+  },
 
   methods: {
     cleanProperty(objeto) {
@@ -227,6 +261,7 @@ export default {
     openDialog() {
       this.onEdit = false;
       this.dialogCrud = true;
+      this.$emit("edit", this.onEdit);
     },
     closeDialog() {
       this.$refs.form.reset();
@@ -293,6 +328,7 @@ export default {
       console.log("this.entityProperty--> 2", this.entityProperty);
       console.log("sampleData--> ", sampleData);
       console.log("this.entityProperty--> 3", this.entityProperty);
+      this.$emit("edit", this.onEdit);
     },
     async postRegisterUpdate() {
       const { valid } = await this.$refs.form.validate();
@@ -302,20 +338,24 @@ export default {
         try {
           if (this.alter) {
             const response = await this.$axios2[this.onEdit ? "put" : "post"](
-              `/${this.endPoint}`,
+              `/${this.postEp ? this.postEp : this.endPoint}`,
               this.entityProperty
             );
             console.log(
-              `${this.onEdit ? "put" : "post"} - /${this.endPoint}`,
+              `${this.onEdit ? "put" : "post"} - /${
+                this.postEp ? this.postEp : this.endPoint
+              }`,
               response
             );
           } else {
             const response = await this.$axios3[this.onEdit ? "put" : "post"](
-              `/${this.endPoint}`,
+              `/${this.postEp ? this.postEp : this.endPoint}`,
               this.entityProperty
             );
             console.log(
-              `${this.onEdit ? "put" : "post"} - /${this.endPoint}`,
+              `${this.onEdit ? "put" : "post"} - /${
+                this.postEp ? this.postEp : this.endPoint
+              }`,
               response
             );
           }
@@ -323,7 +363,12 @@ export default {
           this.closeDialog();
           this.getAll();
         } catch (error) {
-          console.error(`Hubo un error al registrar /${this.endPoint}:`, error);
+          console.error(
+            `Hubo un error al registrar /${
+              this.postEp ? this.postEp : this.endPoint
+            }:`,
+            error
+          );
         }
       }
     },

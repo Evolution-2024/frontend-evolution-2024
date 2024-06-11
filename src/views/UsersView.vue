@@ -1,15 +1,23 @@
 <template>
   <crud-layout
-    endPoint="users/auth/sign-up"
+    end-point="users"
     icon="book-open-variant"
     :entity-property="entityProperty"
+    post-ep="users/auth/sign-up"
     :headers="headers"
+    default-title="username"
+    align-end
     alter
+    hide-detail
+    hide-delete
+    hide-edit
+    hide-hover
+    @edit="onEdit"
   >
     <template #form>
       <v-text-field
-        v-model="entityProperty.name"
-        :rules="nameCourseRules"
+        v-model="entityProperty.username"
+        :rules="contentRules"
         label="Name"
         density="compact"
         variant="outlined"
@@ -18,27 +26,44 @@
         class="pb-3"
         required
       ></v-text-field>
-      <v-textarea
-        v-model="entityProperty.description"
-        :rules="nameCourseRules"
-        label="Description"
+      <v-text-field
+        v-model="entityProperty.email"
+        :rules="emailRules"
+        label="Email"
         density="compact"
         variant="outlined"
         hide-details="false"
         clearable
         class="pb-3"
         required
-      ></v-textarea>
+      ></v-text-field>
+      <v-text-field
+        v-if="!valueEdit"
+        v-model="entityProperty.password"
+        :rules="contentRules"
+        label="Password"
+        density="compact"
+        variant="outlined"
+        :append-inner-icon="
+          marker ? 'mdi-lock-outline' : 'mdi-lock-open-variant-outline'
+        "
+        :type="!marker ? '' : 'password'"
+        @click:append-inner="this.marker = !this.marker"
+        hide-details="false"
+        clearable
+        class="pb-3"
+        required
+      ></v-text-field>
       <v-autocomplete
         density="compact"
         variant="outlined"
-        v-model="entityProperty.competences"
+        label="Roles"
+        required
+        v-model="entityProperty.roles"
         :loading="loadingSelect"
-        :items="competences"
+        :items="roles"
         item-title="name"
-        return-object
-        @focus="getAllCompetences('competences')"
-        label="Competences"
+        item-value="value"
         multiple
       >
       </v-autocomplete>
@@ -64,7 +89,6 @@ export default {
     CrudLayout,
   },
   data() {
-    CrudLayout;
     return {
       nameCourseRules: [(v) => !!v || "Required"],
       headers: [
@@ -72,28 +96,39 @@ export default {
         { text: "Username", value: "username" },
       ],
       entityProperty: {
-        username: '',
-        email: '',
-        password: '',
-        roles: '',
+        username: "",
+        email: "",
+        password: "",
+        roles: [],
       },
+      marker: true,
+      valueEdit: false,
       loadingSelect: false,
-      competences: [],
+      roles: [
+        {
+          name: "STUDENT",
+          value: "ROLE_STUDENT",
+        },
+        {
+          name: "TEACHER",
+          value: "ROLE_TEACHER",
+        },
+        {
+          name: "ADMIN",
+          value: "ROLE_ADMIN",
+        },
+      ],
+      emailRules: [
+        (v) => !!v || "Required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      ],
+      contentRules: [(v) => !!v || "Required"],
     };
   },
   methods: {
-    async getAllCompetences(endPoint) {
-      this.loadingSelect = true;
-      try {
-        const response = await this.$axios3.get(`/${endPoint}?size=100`);
-        this.loadingSelect = false;
-
-        this.competences = response.data.resource;
-        console.log(`get - /${endPoint}`, this.competences);
-      } catch (error) {
-        console.error(`Hubo un error al obtener /${endPoint}:`, error);
-      }
-    },
+    onEdit(value){
+      this.valueEdit = value;
+    }
   },
   mounted() {},
 };

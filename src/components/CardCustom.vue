@@ -8,9 +8,15 @@
     >
       <div class="pa-4 h-100 d-flex flex-column">
         <h3 class="d-flex mb-2">
-          <span class="d-inline-block text-truncate pr-5" style="max-width: 100%">
-
-            {{ entityProperty.name ? entityProperty.name : entityProperty.title }}
+          <span
+            class="d-inline-block text-truncate pr-5"
+            style="max-width: 100%"
+          >
+            {{
+              entityProperty[defaultTitle]
+                ? entityProperty[defaultTitle]
+                : entityProperty.title
+            }}
           </span>
           <v-spacer></v-spacer>
           <v-icon>mdi-book-open-variant</v-icon>
@@ -21,7 +27,12 @@
             props: innerHoverProps,
           }"
         >
-          <v-card v-bind="innerHoverProps" tile class="elevation-0 flex-fill">
+          <v-card
+            v-bind="innerHoverProps"
+            tile
+            class="elevation-0 flex-fill d-flex flex-column"
+            :class="alignEnd ? 'align-end justify-end' : ''"
+          >
             <p
               v-for="(sample, index) in headers"
               :key="index"
@@ -32,13 +43,14 @@
                 >{{ sample.text }}:</span
               >{{ entityProperty[sample.value] }}
             </p>
-            <v-expand-transition>
+            <v-expand-transition v-if="!hideHover">
               <div
                 v-if="isInnerHovering"
-                class="d-flex ga-3 transition-fast-in-fast-out v-card--reveal bg-white"
+                class="d-flex ga-3 transition-fast-in-fast-out v-card--reveal rounded-lg"
                 style="height: 100%"
               >
                 <v-btn
+                  v-if="!hideDelete"
                   size="small"
                   variant="tonal"
                   color="error"
@@ -51,6 +63,7 @@
                   >
                 </v-btn>
                 <v-btn
+                  v-if="!hideEdit"
                   size="small"
                   variant="tonal"
                   color="warning"
@@ -97,11 +110,31 @@ export default {
       type: Object,
       required: true,
     },
+    defaultTitle: {
+      type: String,
+      default: "name",
+    },
     headers: {
       type: Array,
-      required: true,
+      default: () => [{ text: "id", value: "id" }],
+    },
+    hideHover: {
+      type: Boolean,
+      default: false,
     },
     hideDetail: {
+      type: Boolean,
+      default: false,
+    },
+    hideDelete: {
+      type: Boolean,
+      default: false,
+    },
+    hideEdit: {
+      type: Boolean,
+      default: false,
+    },
+    alignEnd: {
       type: Boolean,
       default: false,
     },
@@ -138,8 +171,9 @@ export default {
   align-items: center;
   bottom: 0;
   justify-content: center;
-  opacity:0.85;
+  opacity: 0.9;
   position: absolute;
   width: 100%;
+  background-color: #f9f9f9;
 }
 </style>
