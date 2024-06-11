@@ -1,7 +1,7 @@
 <template>
   <crud-layout
     endPoint="announcements"
-    icon="book-open-variant"
+    icon="bullhorn"
     :entity-property="entityProperty"
     :headers="headers"
     hide-detail
@@ -18,7 +18,7 @@
         class="pb-3"
         required
       ></v-text-field>
-      
+
       <v-textarea
         v-model="entityProperty.description"
         :rules="nameCourseRules"
@@ -30,28 +30,20 @@
         class="pb-3"
         required
       ></v-textarea>
-      <v-text-field
+      <v-autocomplete
+        density="compact"
+        variant="outlined"
         v-model="entityProperty.sectionCode"
-        :rules="nameCourseRules"
-        label="Section Code"
-        density="compact"
-        variant="outlined"
-        hide-details="false"
-        clearable
-        class="pb-3"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="entityProperty.studentCode"
-        :rules="nameCourseRules"
-        label="Student Code"
-        density="compact"
-        variant="outlined"
-        hide-details="false"
-        clearable
-        class="pb-3"
-        required
-      ></v-text-field>
+        :loading="loadingSelect"
+        :items="sections"
+        item-title="id"
+        item-value="id"
+        @focus="getAllSections('sections')"
+        label="Section"
+      >
+      
+      </v-autocomplete>
+      {{entityProperty}}
     </template>
     <template #rightarea>
       <v-card class="pa-2 elevation-0">
@@ -79,17 +71,42 @@ export default {
       nameCourseRules: [(v) => !!v || "Required"],
       headers: [{ text: "Descripción", value: "description" }],
       entityProperty: {
+        id: null,
         title: null,
         description: null,
         sectionCode: null,
-        studentCode: null,
+        teacherCode: null,
       },
       loadingSelect: false,
-      competences: [],
+      sections: [],
     };
   },
-  methods: {},
+  methods: {
+    async getAllSections(endPoint) {
+      this.loadingSelect = true;
+      try {
+        const response = await this.$axios3.get(`/${endPoint}?size=100`);
+        this.loadingSelect = false;
+
+        this.sections = response.data.resource;
+        console.log(`get - /${endPoint}`, this.sections);
+      } catch (error) {
+        console.error(`Hubo un error al obtener /${endPoint}:`, error);
+      }
+    },
+  },
   mounted() {},
+  computed: {
+    user() {
+      const userString = localStorage.getItem("user");
+      return userString ? JSON.parse(userString) : null;
+    },
+  },
+  async created() {
+    setTimeout(() => {
+      this.entityProperty.teacherCode = this.user.id
+    }, 500);
+  },
 };
 </script>
   

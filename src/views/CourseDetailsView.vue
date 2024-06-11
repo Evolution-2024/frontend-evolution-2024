@@ -4,9 +4,11 @@
     endPoint="topics"
     filters
     :crud-detail="courseId"
+    :headers="headers"
     crud-filter="courseId"
     icon="book-open"
     list-view
+    hide-detail
     :entity-property="entityProperty"
     :height-box="292"
   >
@@ -59,7 +61,7 @@
       ></v-textarea>
     </template>
     <template #rightarea>
-      <v-card class="pa-2 elevation-0">
+      <v-card class="pa-2 elevation-0 rounded-lg">
         <div class="bg-white">
           <h3>Competencias</h3>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
@@ -67,20 +69,30 @@
           quia unde corporis nam molestiae. Ab iure velit debitis soluta
           consequuntur dolorem omnis.
         </div>
-        <v-chip-group v-model="amenities" column multiple>
-          <v-chip text="Elevator" variant="outlined" filter></v-chip>
-
-          <v-chip text="Washer / Dryer" variant="outlined" filter></v-chip>
-
-          <v-chip text="Fireplace" variant="outlined" filter></v-chip>
-
-          <v-chip text="Wheelchair access" variant="outlined" filter></v-chip>
-
-          <v-chip text="Dogs ok" variant="outlined" filter></v-chip>
-
-          <v-chip text="Cats ok" variant="outlined" filter></v-chip>
+        <v-chip-group v-model="amenities" column>
+          <v-chip
+            v-for="(item, index) in entityDetail.competences"
+            :key="index"
+            :text="item.name"
+            variant="outlined"
+            filter
+          ></v-chip>
         </v-chip-group>
       </v-card>
+      <v-expand-transition>
+        <v-alert
+          v-model="showAlert"
+          border="top"
+          class="mt-3 rounded-lg"
+          color="primary"
+          variant="tonal"
+        >
+        <h3>
+          {{entityDetail.competences[amenities].name}}
+        </h3>
+          {{entityDetail.competences[amenities].description}}
+        </v-alert>
+      </v-expand-transition>
     </template>
   </crud-layout>
 </template>
@@ -97,7 +109,8 @@ export default {
   data() {
     return {
       loading: false,
-      amenities: [1, 4],
+      amenities: null,
+      alert: true,
 
       courseId: null,
       materials: [],
@@ -107,6 +120,9 @@ export default {
         description: null,
         competences: null,
       },
+      competences: [],
+
+      headers: [{ text: "Description", value: "description" }],
       entityProperty: {
         title: "",
         description: "",
@@ -132,8 +148,14 @@ export default {
     },
   },
   mounted() {},
+  computed: {
+    showAlert() {
+      return this.amenities != null;
+    },
+  },
   async created() {
     this.courseId = await this.$route.params.id;
+    this.entityProperty.courseId = this.courseId;
     this.getItemId("courses");
   },
 };

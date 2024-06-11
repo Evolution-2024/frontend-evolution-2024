@@ -41,16 +41,32 @@
 
         <v-expand-transition>
           <v-card
-            class="pa-2 overflow-hidden elevation-0"
+            class="pa-2 px-4 overflow-hidden elevation-0"
             color="#f2f2f2"
             :width="256"
             v-show="!rail"
           >
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
-              odio illum non, ullam distinctio sunt aliquam sequi cum
-              asperiores!
-            </p>
+            <p class="text-uppercase font-weight-black">Session:</p>
+            <div class="d-flex justify-space-between">
+              <span class="font-weight-bold text-uppercase">User:</span>
+              <span>
+                {{ user.username }}
+              </span>
+            </div>
+            <div class="d-flex justify-space-between">
+              <span class="font-weight-bold text-uppercase">MAIL:</span>
+              <span>
+                {{ user.email }}
+              </span>
+            </div>
+            <div class="d-flex justify-space-between">
+              <span class="font-weight-bold text-uppercase"> ROL: </span>
+              <div class="text-capitalize">
+                <span v-for="(roleName, index) in userRoleNames" :key="index" class="">
+                  {{ index != 0 ? "," : "" }} {{ roleName }}
+                </span>
+              </div>
+            </div>
           </v-card>
         </v-expand-transition>
 
@@ -222,9 +238,37 @@ export default {
 
     drawer: true,
     rail: false,
+    roles: [
+      {
+        name: "student",
+        value: "ROLE_STUDENT",
+      },
+      {
+        name: "teacher",
+        value: "ROLE_TEACHER",
+      },
+      {
+        name: "admin",
+        value: "ROLE_ADMIN",
+      },
+    ],
   }),
 
-  computed: {},
+  computed: {
+    user() {
+      const userString = localStorage.getItem("user");
+      return userString ? JSON.parse(userString) : null;
+    },
+    userRoles() {
+      return this.user ? this.user.roles : [];
+    },
+    userRoleNames() {
+      return this.userRoles.map((roleValue) => {
+        const role = this.roles.find((r) => r.value === roleValue);
+        return role ? role.name : "Unknown Role";
+      });
+    },
+  },
 
   methods: {
     logLayout() {

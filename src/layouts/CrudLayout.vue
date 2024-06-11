@@ -101,11 +101,11 @@
               color="primary"
             >
               <p class="text-caption font-weight-bold">Alert Title</p>
-              <p style="line-height: 1.2 !important">
+              <div style="line-height: 1.2 !important">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam
                 eos expedita repudiandae repellendus ullam debitis iure cumque
                 ipsam atque. Unde eius maiores rem laborum!
-              </p>
+              </div>
             </v-alert>
             <v-form
               ref="form"

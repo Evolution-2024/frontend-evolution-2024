@@ -76,8 +76,9 @@ export default {
     return {
       nameCourseRules: [(v) => !!v || "Required"],
       headers: [
-        { text: "Code", value: "code" },
+        { text: "Grado", value: "gradeId" },
         { text: "Description", value: "description" },
+        { text: "Code", value: "code" },
       ],
       entityProperty: {
         code: "",
