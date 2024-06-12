@@ -131,6 +131,23 @@
           </v-card>
         </v-dialog>
       </div>
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="2000"
+        :color="snackbarState ? 'green-accent-4' : 'red-accent-3'"
+        rounded="lg"
+        elevation="24"
+      >
+        <p class="text-white">
+          {{ snackbarState ? "Success register" : snackbarText }}
+        </p>
+
+        <template v-slot:actions>
+          <v-btn color="white" icon @click="snackbar = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
     <v-navigation-drawer
       location="right"
@@ -233,6 +250,9 @@ export default {
     dialogCrud: false,
     onEdit: false,
     itemsCrud: [],
+    snackbar: false,
+    snackbarState: false,
+    snackbarText: "",
   }),
 
   watch: {
@@ -361,6 +381,8 @@ export default {
               response
             );
           }
+          this.snackbarState = true;
+          this.snackbar = true;
           this.loadingCrud = false;
           this.closeDialog();
           this.getAll();
@@ -371,6 +393,14 @@ export default {
             }:`,
             error
           );
+          if (error.response.status == 400) {
+            this.closeDialog();
+            this.loadingCrud = false;
+
+            this.snackbarText = error.response.data.message;
+            this.snackbarState = false;
+            this.snackbar = true;
+          }
         }
       }
     },

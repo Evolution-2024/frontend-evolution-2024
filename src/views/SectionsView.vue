@@ -4,7 +4,6 @@
     icon="google-classroom"
     :entity-property="entityProperty"
     :headers="headers"
-    hide-detail
   >
     <template #form>
       <v-text-field

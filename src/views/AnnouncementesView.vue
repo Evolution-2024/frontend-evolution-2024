@@ -30,21 +30,24 @@
         clearable
         class="pb-3"
         required
-      ></v-textarea>
-      <v-autocomplete
+        ></v-textarea>
+        <v-autocomplete
+        class="pb-3"
+        hide-details="false"
+        :rules="nameCourseRules"
         density="compact"
         variant="outlined"
         v-model="entityProperty.sectionCode"
         :loading="loadingSelect"
         :items="sections"
-        item-title="id"
+        item-title="code"
         item-value="id"
         @focus="getAllSections('sections')"
         label="Section"
       >
       
       </v-autocomplete>
-      {{entityProperty}}
+      <!-- {{entityProperty}} -->
     </template>
     <template #rightarea>
       <v-card class="pa-2 elevation-0">

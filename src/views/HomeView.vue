@@ -19,34 +19,19 @@
               :options="chartOptions"
               :series="series"
             ></apexchart>
-            <v-card class="text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
-            <v-card class="text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
-            <v-card class="text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
+            <apexchart
+              type="bar"
+              height="350"
+              :options="chartOptionsBar"
+              :series="seriesBar"
+            ></apexchart>
           </v-card>
         </v-col>
         <v-col class="d-flex flex-column ga-2" cols="12" md="5">
-          <v-card class="rounded-lg text-justify pa-3 elevation-0 bg-primary" color="">
+          <v-card
+            class="rounded-lg text-justify pa-3 elevation-0 bg-primary"
+            color=""
+          >
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
             necessitatibus doloremque minima debitis esse eos reprehenderit
             repellendus atque perferendis cupiditate dolorem, saepe accusantium,
@@ -69,14 +54,20 @@
             molestiae quasi eaque vero! Lorem ipsum, dolor sit amet consectetur
             adipisicing elit.
           </v-card>
-          <v-card class="rounded-lg text-justify pa-3 elevation-0 bg-primary" color="">
+          <v-card
+            class="rounded-lg text-justify pa-3 elevation-0 bg-primary"
+            color=""
+          >
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
             necessitatibus doloremque minima debitis esse eos reprehenderit
             repellendus atque perferendis cupiditate dolorem, saepe accusantium,
             cumque recusandae voluptatem? Mollitia, id sapiente? Lorem ipsum
             dolor sit amet consectetur adipisicing elit.
           </v-card>
-          <v-card class="rounded-lg text-justify pa-3 elevation-0 bg-primary" color="">
+          <v-card
+            class="rounded-lg text-justify pa-3 elevation-0 bg-primary"
+            color=""
+          >
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
             necessitatibus doloremque minima debitis esse eos reprehenderit
             repellendus atque perferendis cupiditate dolorem, saepe accusantium,
@@ -180,6 +171,85 @@ export default {
               return y;
             },
           },
+        },
+      },
+      seriesBar: [
+        {
+          name: "A",
+          data: [44, 55, 41, 37, 22, 43, 21],
+        },
+        {
+          name: "B",
+          data: [53, 32, 33, 52, 13, 43, 32],
+        },
+        {
+          name: "C",
+          data: [12, 17, 11, 9, 15, 11, 20],
+        },
+        {
+          name: "D",
+          data: [9, 7, 5, 8, 6, 9, 4],
+        },
+        {
+          name: "E",
+          data: [25, 12, 19, 32, 25, 24, 10],
+        },
+      ],
+      chartOptionsBar: {
+        chart: {
+          type: "bar",
+          height: 350,
+          stacked: true,
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            dataLabels: {
+              total: {
+                enabled: true,
+                offsetX: 0,
+                style: {
+                  fontSize: "13px",
+                  fontWeight: 900,
+                },
+              },
+            },
+          },
+        },
+        stroke: {
+          width: 1,
+          colors: ["#fff"],
+        },
+        title: {
+          text: "Competences Graphic",
+        },
+        xaxis: {
+          categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
+          labels: {
+            formatter: function (val) {
+              return val + "K";
+            },
+          },
+        },
+        yaxis: {
+          title: {
+            text: undefined,
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + "K";
+            },
+          },
+        },
+        fill: {
+          opacity: 1,
+        },
+        legend: {
+          position: "top",
+          horizontalAlign: "left",
+          offsetX: 40,
         },
       },
     };

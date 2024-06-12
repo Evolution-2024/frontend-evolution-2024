@@ -67,7 +67,7 @@
                   :key="index"
                   class=""
                 >
-                  {{ index != 0 ? "," : "" }} {{ roleName }}
+                  {{ index != 0 ? "," : "" }} {{ roleName.name }}
                 </span>
               </div>
             </div>
@@ -75,16 +75,18 @@
         </v-expand-transition>
 
         <v-divider v-show="!rail"></v-divider>
-
         <v-list density="compact" nav>
           <v-list-subheader v-show="!rail">MODULOS</v-list-subheader>
           <v-list-item
-            v-for="item in menuItems"
+            v-for="item in uniqueModules"
             :key="item.value"
             :prepend-icon="item.icon"
-            :title="item.title"
-            @click="pushName(item.route)"
-          ></v-list-item>
+            @click="pushName(item.value)"
+          >
+            <v-list-item-title class="text-capitalize">
+              {{ item.value }}
+            </v-list-item-title>
+          </v-list-item>
         </v-list>
 
         <div class="flex-fill d-flex flex-column justify-end">
@@ -209,58 +211,63 @@ export default {
   data: () => ({
     dataLayout: false,
     expand: false,
-    menuItems: [
-      {
-        icon: "mdi-view-dashboard",
-        title: "Dashboard",
-        value: "dashboard",
-        route: "home",
-      },
-      {
-        icon: "mdi-book-open-variant",
-        title: "Courses",
-        value: "courses",
-        route: "courses",
-      },
-      {
-        icon: "mdi-account-group-outline",
-        title: "Users",
-        value: "users",
-        route: "users",
-      },
-      {
-        icon: "mdi-google-classroom",
-        title: "Sections",
-        value: "sections",
-        route: "sections",
-      },
-      {
-        icon: "mdi-bookmark",
-        title: "Competences",
-        value: "competences",
-        route: "competences",
-      },
-      {
-        icon: "mdi-bullhorn",
-        title: "Announcements",
-        value: "announcements",
-        route: "announcements",
-      },
-    ],
+    menuItems: [],
     drawer: true,
     rail: false,
     roles: [
       {
         name: "student",
         value: "ROLE_STUDENT",
+        modules: [
+          {
+            icon: "mdi-view-dashboard",
+            value: "dashboard",
+          },
+          {
+            icon: "mdi-book-open-variant",
+            value: "courses",
+          },
+          {
+            icon: "mdi-google-classroom",
+            value: "sections",
+          },
+        ],
       },
       {
         name: "teacher",
         value: "ROLE_TEACHER",
+        modules: [
+          {
+            icon: "mdi-account-group-outline",
+            value: "users",
+          },
+          {
+            icon: "mdi-google-classroom",
+            value: "sections",
+          },
+        ],
       },
       {
         name: "admin",
         value: "ROLE_ADMIN",
+        modules: [
+          {
+            icon: "mdi-book-open-variant",
+            value: "courses",
+          },
+          {
+            icon: "mdi-bookmark",
+            value: "competences",
+          },
+          {
+            icon: "mdi-bullhorn",
+            value: "announcements",
+          },
+          {
+            icon: "mdi-google-classroom",
+            value: "sections",
+          },
+        ],
       },
     ],
   }),
@@ -276,8 +283,18 @@ export default {
     userRoleNames() {
       return this.userRoles.map((roleValue) => {
         const role = this.roles.find((r) => r.value === roleValue);
-        return role ? role.name : "Unknown Role";
+        return role ? role : "Unknown Role";
       });
+    },
+    uniqueModules() {
+      const allModules = this.userRoleNames.flatMap((role) => role.modules);
+
+      // Crear un conjunto para obtener valores únicos basados en el valor de los módulos
+      return Array.from(new Set(allModules.map((module) => module.value))).map(
+        (value) => {
+          return allModules.find((module) => module.value === value);
+        }
+      );
     },
   },
 

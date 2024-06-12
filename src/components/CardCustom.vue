@@ -22,7 +22,6 @@
           <v-icon>mdi-{{icon}}</v-icon>
         </h3>
         <v-hover
-          class=""
           v-slot:default="{
             isHovering: isInnerHovering,
             props: innerHoverProps,
