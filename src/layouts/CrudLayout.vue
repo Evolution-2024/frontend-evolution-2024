@@ -55,8 +55,10 @@
               :md="listView ? 12 : 6"
             >
               <card-custom
+                :icon="icon"
                 :headers="headers"
                 :entityProperty="item"
+                :listView="listView"
                 :hide-detail="hideDetail"
                 :hide-edit="hideEdit"
                 :hide-hover="hideHover"

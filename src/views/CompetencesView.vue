@@ -1,7 +1,7 @@
 <template>
     <crud-layout
       endPoint="competences"
-      icon="book-open-variant"
+      icon="bookmark"
       :entity-property="entityProperty"
       :headers="headers"
       hide-detail

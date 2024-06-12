@@ -2,7 +2,7 @@
   <v-hover v-slot="{ isHovering, props }">
     <v-card
       class="pa-0 rounded-lg"
-      height="180"
+      :height="listView?'120':'180'"
       v-bind="props"
       :elevation="isHovering ? 24 : 0"
     >
@@ -19,7 +19,7 @@
             }}
           </span>
           <v-spacer></v-spacer>
-          <v-icon>mdi-book-open-variant</v-icon>
+          <v-icon>mdi-{{icon}}</v-icon>
         </h3>
         <v-hover
           class=""
@@ -48,6 +48,7 @@
               <div
                 v-if="isInnerHovering"
                 class="d-flex ga-3 transition-fast-in-fast-out v-card--reveal rounded-lg"
+                :class="listView?'align-end justify-end bg-transparent':'align-center justify-center opacity-90'"
                 style="height: 100%"
               >
                 <v-btn
@@ -91,6 +92,7 @@
             </v-expand-transition>
           </v-card>
         </v-hover>
+        <!-------------- MOBILE -------------->
         <v-card
           tile
           class="elevation-0 flex-fill d-flex d-sm-none flex-column"
@@ -174,6 +176,10 @@ export default {
       type: String,
       default: "name",
     },
+    icon: {
+      type: String,
+      default: "home",
+    },
     headers: {
       type: Array,
       default: () => [{ text: "id", value: "id" }],
@@ -195,6 +201,10 @@ export default {
       default: false,
     },
     alignEnd: {
+      type: Boolean,
+      default: false,
+    },
+    listView: {
       type: Boolean,
       default: false,
     },
@@ -235,10 +245,10 @@ export default {
 
 <style>
 .v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
+  /* align-items: center;
   opacity: 0.9;
+  justify-content: center; */
+  bottom: 0;
   position: absolute;
   width: 100%;
   background-color: #f9f9f9;

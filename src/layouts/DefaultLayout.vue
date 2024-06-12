@@ -235,7 +235,7 @@ export default {
         route: "sections",
       },
       {
-        icon: "mdi-home",
+        icon: "mdi-bookmark",
         title: "Competences",
         value: "competences",
         route: "competences",

@@ -2,6 +2,7 @@
   <crud-layout
     endPoint="announcements"
     icon="bullhorn"
+    list-view
     :entity-property="entityProperty"
     :headers="headers"
     hide-detail

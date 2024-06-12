@@ -1,7 +1,7 @@
 <template>
   <crud-layout
     end-point="users"
-    icon="book-open-variant"
+    icon="account"
     :entity-property="entityProperty"
     post-ep="users/auth/sign-up"
     :headers="headers"

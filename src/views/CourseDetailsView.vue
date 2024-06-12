@@ -1,6 +1,6 @@
 <template>
   <crud-layout
-    title="Detail Course"
+    title="Detail"
     endPoint="topics"
     filters
     :crud-detail="courseId"
