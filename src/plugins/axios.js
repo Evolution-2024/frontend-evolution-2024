@@ -46,7 +46,7 @@ const axiosGPT = axios.create({
   baseURL: "https://api.openai.com/v1", // Reemplaza esta URL con la base de tu otra API
   timeout: 10000, // Ajusta el tiempo de espera según tus necesidades
   headers: {
-    Authorization: `Bearer APIKEY`,
+    Authorization: `Bearer sk-${process.env.VUE_APP_OPENAI_API_KEY}`,
     "Content-Type": "application/json",
   },
 });
