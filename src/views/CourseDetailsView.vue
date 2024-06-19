@@ -26,6 +26,18 @@
         </p>
       </v-card>
     </div>
+    <template v-slot:appendButton="slotProps">
+      <v-btn
+        size="small"
+        variant="tonal"
+        color="info"
+        icon
+        @click="generateExam(slotProps)"
+      >
+        <v-icon>mdi-home</v-icon>
+        <v-tooltip activator="parent" location="top">Detail</v-tooltip>
+      </v-btn>
+    </template>
     <template #upList>
       <h2 class="pa-2">Material Semanal</h2>
     </template>
@@ -141,6 +153,146 @@
         <v-btn color="white" @click="snackbar = false"> Close </v-btn>
       </template>
     </v-snackbar>
+    <v-overlay
+      :model-value="overlay"
+      class="align-center justify-center"
+      persistent
+    >
+      <div class="card rounded">
+        <div class="bg rounded-lg uwu"></div>
+        <div class="bg rounded-lg"></div>
+        <v-card
+          class="d-flex elevation-0 flex-column h-100 justify-center align-center glass-effect rounded pa-4"
+          :loading="overlay"
+        >
+          <v-icon color="white" size="large">mdi-assistant</v-icon>
+          <div class="pt-3 font-weight-black text-center">
+            <p>GENERANDO</p>
+            <p>EXAMEN</p>
+          </div>
+        </v-card>
+      </div>
+    </v-overlay>
+    <v-dialog v-model="dialogExam" :max-width="750" persistent>
+      <v-card class="pa-6 rounded-lg elevation-0 d-flex flex-column ga-3">
+        <div class="d-flex align-center">
+          <h3 class="text-capitalize">Registrar: Examen</h3>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            icon
+            density="comfortable"
+            class="elevation-0"
+            @click="closeDialog"
+          >
+            <v-icon color="primary">mdi-close-thick</v-icon>
+          </v-btn>
+        </div>
+        <v-alert
+          icon="mdi-information-outline"
+          variant="tonal"
+          class="text-caption"
+          border="start"
+          color="primary"
+        >
+          <p class="text-caption font-weight-bold">Alert Title</p>
+          <div style="line-height: 1.2 !important">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit aperiam eos
+            expedita.
+          </div>
+        </v-alert>
+        <v-form
+              ref="form"
+              class="w-100"
+              :disabled="loadingGenerate"
+            >
+          <v-autocomplete
+          hide-details
+          :rules="contentRules"
+          density="compact"
+          variant="outlined"
+          v-model="sectionCode"
+          :loading="loadingSelect"
+          :items="sections"
+          item-title="code"
+          item-value="id"
+          @focus="getAllSections('sections')"
+          label="Section"
+        ></v-autocomplete>
+            </v-form>
+        <v-card
+          max-height="400"
+          class="overflow-auto d-flex flex-column ga-3 elevation-0"
+        >
+          <div v-for="(item, index) in examDetailResources" :key="index">
+            <v-card variant="outlined" class="pa-3 rounded-lg">
+              <p v-if="!viewFields" class="font-weight-black mb-2">
+                {{ index + 1 }}. {{ item.question }}
+              </p>
+              <v-text-field
+                v-else
+                v-model="item.question"
+                :rules="contentRules"
+                :label="`${index + 1}. Question`"
+                density="compact"
+                variant="outlined"
+                hide-details="false"
+                clearable
+                class="pb-4 pt-1"
+                required
+              ></v-text-field>
+              <v-radio-group
+                density="compact"
+                hide-details
+                v-model="item.correctOptionOrder"
+                v-if="!viewFields"
+              >
+                <v-radio
+                  color="primary"
+                  v-for="(alternative, i) in item.options"
+                  :key="i"
+                  :label="alternative"
+                  :value="i + 1"
+                ></v-radio>
+              </v-radio-group>
+              <div v-else class="d-flex flex-column ga-3">
+                <v-text-field
+                  v-for="(alternative, i) in item.options"
+                  :key="i"
+                  v-model="item.options[i]"
+                  :rules="contentRules"
+                  :label="
+                    item.correctOptionOrder == i + 1
+                      ? 'Alternative (Correct)'
+                      : 'Alternative'
+                  "
+                  density="compact"
+                  variant="outlined"
+                  hide-details="false"
+                  clearable
+                  required
+                ></v-text-field>
+              </div>
+            </v-card>
+          </div>
+        </v-card>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn variant="text" @click="viewFields = !viewFields">
+            {{ !viewFields ? "EDITAR" : "LISTO" }}
+          </v-btn>
+          <v-btn
+            :disabled="viewFields"
+            variant="tonal"
+            color="primary"
+            @click="postRegisterExam"
+            :loading="loadingGenerate"
+          >
+            Registrar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </crud-layout>
 </template>
 
@@ -155,6 +307,17 @@ export default {
   },
   data() {
     return {
+      viewFields: false,
+      dialogExam: false,
+      overlay: false,
+      examDetailResources: [],
+
+      loadingGenerate: false,
+
+      sectionCode: "",
+      loadingSelect: false,
+      sections: [],
+
       isDragging: false,
       selectedFile: null,
       base64File: "",
@@ -193,6 +356,75 @@ export default {
     };
   },
   methods: {
+    async getAllSections(endPoint) {
+      this.loadingSelect = true;
+      try {
+        const response = await this.$axios3.get(`/${endPoint}?size=100`);
+        this.loadingSelect = false;
+
+        this.sections = response.data.resource;
+        console.log(`get - /${endPoint}`, this.sections);
+      } catch (error) {
+        console.error(`Hubo un error al obtener /${endPoint}:`, error);
+      }
+    },
+    closeDialog() {
+      this.$refs.form.reset();
+      this.$refs.form.resetValidation();
+      this.dialogExam = false;
+    },
+    async generateExam(originalText) {
+      this.topicCode = originalText.id;
+      this.overlay = true;
+
+      const maxLength = 4097;
+      let text = originalText.content;
+      while (text.length > maxLength) {
+        // Reducir el texto en un 10% (puedes ajustar este valor según sea necesario)
+        const reductionFactor = 0.9;
+        const newLength = Math.floor(text.length * reductionFactor);
+        text = text.substring(0, newLength);
+      }
+
+      try {
+        const response = await this.$axiosGPT.post("/completions", {
+          model: "gpt-3.5-turbo-instruct",
+          prompt: `Genera un examen basado en el siguiente texto: "${text}" de 5 preguntas con 3 alternativas de respuesta unica.Dame las preguntas y alternativas en formato JSON con los atributos que propongo, ademas considera que solo una alternativa es correcta.[  {    "question": "¿CONTENIDO DE PREGUNTA?",    "options": [      "CONTENIDO ALTERNATIVA 1",      "CONTENIDO ALTERNATIVA 2",      "CONTENIDO ALTERNATIVA 3"    ],    "correctOptionOrder": (VALOR ENTRE 1 y 3)  },  {...},  {...},  {...},  {...},] `,
+          max_tokens: 750,
+          n: 1,
+          stop: null,
+          temperature: 0.7,
+        });
+        const generatedExam = response.data.choices[0].text.trim();
+        console.log("Examen Generated");
+        this.examDetailResources = JSON.parse(generatedExam);
+        console.log("Exam --> ", JSON.parse(generatedExam));
+        this.overlay = false;
+        this.dialogExam = true;
+      } catch (error) {
+        console.error("Error generating exam:", error);
+      }
+    },
+    async postRegisterExam() {
+      const { valid } = await this.$refs.form.validate();
+
+      if (valid) {
+        this.loadingGenerate = true;
+        try {
+          const response = await this.$axios4.post("/exams", {
+            topicCode: this.topicCode,
+            sectionCode: this.sectionCode,
+            courseCode: Number(this.courseId),
+            examDetailResources: this.examDetailResources,
+          });
+          this.closeDialog();
+          this.loadingGenerate = false;
+          console.log("response Exams", response);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
     onDragOver() {
       this.isDragging = true;
     },
@@ -215,23 +447,17 @@ export default {
     handleFile(file) {
       this.fileSizeMB = file.size / (1024 * 1024);
       if (this.fileSizeMB > this.maxFileSizeMB) {
-        // this.dropZoneMessage = `El archivo supera el tamaño máximo permitido de ${this.maxFileSizeMB} MB`;
-        // setTimeout(() => {
-        //   this.dropZoneMessage = "Suelta tu archivo aquí";
-        // }, 1250);
         this.snackbar = true;
         this.fileSizeMB = "";
         return;
       }
 
       this.selectedFile = file;
-      // this.dropZoneMessage = `${file.name}`; // Actualiza el mensaje con el nombre del archivo
 
       this.entityProperty.description = file.name;
       console.log(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        // Eliminar el prefijo data: del resultado base64
         const base64Result = reader.result.split(",")[1];
         this.entityProperty.file = base64Result;
       };
@@ -260,6 +486,16 @@ export default {
         this.fileSizeMB = "";
       }
     },
+    actionItem(item) {
+      console.log("content-->", item);
+    },
+  },
+  watch: {
+    // overlay (val) {
+    //   val && setTimeout(() => {
+    //     this.overlay = false
+    //   }, 3000)
+    // },
   },
   mounted() {},
   computed: {
@@ -269,7 +505,6 @@ export default {
         message = "Suelta tu archivo aquí";
         return message;
       } else {
-        // message = this.selectedFile.name;
         message = "";
         return message;
       }
@@ -278,7 +513,6 @@ export default {
       return this.amenities != null;
     },
     pdfUrl() {
-      // Si el archivo es un PDF, puedes mostrarlo en un visor de PDF usando un iframe
       return `data:application/pdf;base64,${this.entityProperty.file}`;
     },
   },
@@ -304,5 +538,83 @@ export default {
 
 .file-input {
   display: none;
+}
+
+.card {
+  position: relative;
+  width: 200px;
+  /* height: 50px; */
+  /* background: #f2f2f2; */
+  /* opacity: 0.3; */
+  /* filter: blur(8px); */
+  /* border-radius: 14px; */
+}
+
+.bg {
+  position: absolute;
+  z-index: -1;
+  inset: -6px;
+  overflow: hidden;
+}
+
+.uwu {
+  filter: blur(10px);
+  transition: filter 0.3s;
+}
+
+.bg::before {
+  content: "";
+  position: absolute;
+  aspect-ratio: 1/1;
+  top: 50%;
+  left: 50%;
+  min-width: 150%;
+  min-height: 150%;
+  background-image: conic-gradient(
+    hsl(0, 100%, 50%, 0.8),
+    hsl(30, 100%, 50%, 0.8),
+    hsl(60, 100%, 50%, 0.8),
+    hsl(90, 100%, 50%, 0.8),
+    hsl(120, 100%, 50%, 0.8),
+    hsl(150, 100%, 50%, 0.8),
+    hsl(180, 100%, 50%, 0.8),
+    hsl(210, 100%, 50%, 0.8),
+    hsl(240, 100%, 60%, 0.8),
+    hsl(270, 100%, 50%, 0.8),
+    hsl(300, 100%, 50%, 0.8),
+    hsl(330, 100%, 50%, 0.8),
+    hsl(360, 100%, 50%, 0.8)
+  );
+  animation: speeen 4s linear infinite;
+  transform-origin: 0% 0%;
+  transform: rotate(0deg) translate(-50%, -50%);
+}
+
+@keyframes speeen {
+  from {
+    transform: rotate(0deg) translate(-50%, -50%);
+  }
+
+  to {
+    transform: rotate(360deg) translate(-50%, -50%);
+  }
+}
+
+.glass-effect {
+  background: rgba(
+    255,
+    255,
+    255,
+    0.38
+  ); /* Color de fondo blanco con opacidad */
+  /* border-radius: 10px; */
+  backdrop-filter: blur(15px); /* Efecto de desenfoque */
+  -webkit-backdrop-filter: blur(
+    15px
+  ); /* Efecto de desenfoque para navegadores basados en Webkit */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Borde semi-transparente */
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  /* padding: 20px; */
+  color: #fff; /* Color de texto blanco */
 }
 </style>

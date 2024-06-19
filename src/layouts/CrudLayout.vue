@@ -68,7 +68,12 @@
                 @delete="deleteItem"
                 @edit="editItem"
                 @detail="detailItem"
-              ></card-custom>
+              >
+                <template #appendButton>
+                  <slot name="appendButton" v-bind="item">
+                  </slot>
+                </template>
+              </card-custom>
             </v-col>
           </v-row>
           <div

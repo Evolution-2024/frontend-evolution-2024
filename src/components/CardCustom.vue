@@ -87,6 +87,7 @@
                     >Detail</v-tooltip
                   >
                 </v-btn>
+                <slot name="appendButton"></slot>
               </div>
             </v-expand-transition>
           </v-card>
@@ -148,6 +149,7 @@
                 <v-icon>mdi-eye</v-icon>
                 <v-tooltip activator="parent" location="top">Detail</v-tooltip>
               </v-btn>
+              <slot name="appendButton"></slot>
             </div>
           </v-expand-transition>
         </v-card>
