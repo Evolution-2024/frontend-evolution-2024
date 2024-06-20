@@ -16,6 +16,9 @@ export default {
   components: {
     DefaultLayout,
   },
+  mounted() {
+    document.title = "Evolution";
+  }
   
 }
 </script>

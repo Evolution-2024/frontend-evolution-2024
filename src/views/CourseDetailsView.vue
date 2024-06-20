@@ -30,12 +30,12 @@
       <v-btn
         size="small"
         variant="tonal"
-        color="info"
+        color="primary"
         icon
         @click="generateExam(slotProps)"
       >
-        <v-icon>mdi-home</v-icon>
-        <v-tooltip activator="parent" location="top">Detail</v-tooltip>
+        <v-icon>mdi-assistant</v-icon>
+        <v-tooltip activator="parent" location="top">Examen IA</v-tooltip>
       </v-btn>
     </template>
     <template #upList>
