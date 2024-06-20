@@ -18,11 +18,7 @@
         <h1>{{ entityDetail.name }}</h1>
         <p class="text-caption pb-3">Descripcion</p>
         <p class="text-justify">
-          {{ entityDetail.description }} || Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Ex autem voluptatem corporis numquam nam
-          voluptates alias veniam. Debitis quisquam illo doloribus, facilis
-          pariatur iure ipsam amet incidunt doloremque, dolor voluptatem.
-          consectetur adipisicing elit.
+          {{ entityDetail.description }}
         </p>
       </v-card>
     </div>
@@ -114,10 +110,10 @@
       <v-card class="pa-2 elevation-0 rounded-lg">
         <div class="bg-white">
           <h3>Competencias</h3>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto
-          sint deleniti, dolores nesciunt expedita eligendi velit, dignissimos
-          quia unde corporis nam molestiae. Ab iure velit debitis soluta
-          consequuntur dolorem omnis.
+          <div class="text-justify py-2">
+
+            En el contexto educativo, competencia se refiere a las habilidades y conocimientos fundamentales que los estudiantes deben desarrollar para cumplir con objetivos específicos de aprendizaje. 
+          </div>
         </div>
         <v-chip-group v-model="amenities" column>
           <v-chip

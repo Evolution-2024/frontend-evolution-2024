@@ -47,10 +47,14 @@
             v-show="!rail"
           >
             <p class="text-uppercase font-weight-black">Session:</p>
-            <div class="d-flex justify-space-between">
+            <div class="d-flex justify-space-between"
+            >
               <span class="font-weight-bold text-uppercase">User:</span>
-              <span>
+              <span class="d-inline-block text-truncate pl-2" style="max-width: 100%">
                 {{ user.username }}
+                <v-tooltip activator="parent" location="top"
+                      >{{ user.username }}</v-tooltip
+                    >
               </span>
             </div>
             <div class="d-flex justify-space-between">
