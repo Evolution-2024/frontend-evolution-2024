@@ -225,7 +225,7 @@ export default {
         modules: [
           {
             icon: "mdi-view-dashboard",
-            value: "dashboard",
+            value: "home",
           },
           {
             icon: "mdi-book-open-variant",
@@ -243,7 +243,7 @@ export default {
           },
           {
             icon: "mdi-view-dashboard",
-            value: "dashboard",
+            value: "home",
           },
           {
             icon: "mdi-google-classroom",
@@ -261,7 +261,7 @@ export default {
         modules: [
           {
             icon: "mdi-view-dashboard",
-            value: "dashboard",
+            value: "home",
           },
           {
             icon: "mdi-book-open-variant",
