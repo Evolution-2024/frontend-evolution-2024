@@ -16,9 +16,20 @@
   >
     <template #form>
       <v-text-field
-        v-model="entityProperty.username"
+        v-model="name"
         :rules="contentRules"
-        label="Name & Last Name"
+        label="Name"
+        density="compact"
+        variant="outlined"
+        hide-details="false"
+        clearable
+        class="pb-3"
+        required
+      ></v-text-field>
+      <v-text-field
+        v-model="lastName"
+        :rules="contentRules"
+        label="Last Name"
         density="compact"
         variant="outlined"
         hide-details="false"
@@ -95,6 +106,8 @@ export default {
         { text: "Email", value: "email" },
         { text: "Username", value: "username" },
       ],
+      name: "",
+      lastName: "",
       entityProperty: {
         username: "",
         email: "",
@@ -126,9 +139,17 @@ export default {
     };
   },
   methods: {
-    onEdit(value){
+    onEdit(value) {
       this.valueEdit = value;
-    }
+    },
+  },
+  watch: {
+    name(newVal) {
+      this.entityProperty.username = newVal + " " + this.lastName;
+    },
+    lastName(newVal) {
+      this.entityProperty.username = this.name + " " + newVal;
+    },
   },
   mounted() {},
 };
