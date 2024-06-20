@@ -227,10 +227,6 @@ export default {
             icon: "mdi-book-open-variant",
             value: "courses",
           },
-          {
-            icon: "mdi-google-classroom",
-            value: "sections",
-          },
         ],
       },
       {
@@ -238,12 +234,20 @@ export default {
         value: "ROLE_TEACHER",
         modules: [
           {
-            icon: "mdi-account-group-outline",
-            value: "users",
+            icon: "mdi-book-open-variant",
+            value: "courses",
+          },
+          {
+            icon: "mdi-view-dashboard",
+            value: "dashboard",
           },
           {
             icon: "mdi-google-classroom",
             value: "sections",
+          },
+          {
+            icon: "mdi-bullhorn",
+            value: "announcements",
           },
         ],
       },
@@ -251,6 +255,10 @@ export default {
         name: "admin",
         value: "ROLE_ADMIN",
         modules: [
+          {
+            icon: "mdi-view-dashboard",
+            value: "dashboard",
+          },
           {
             icon: "mdi-book-open-variant",
             value: "courses",
@@ -262,6 +270,10 @@ export default {
           {
             icon: "mdi-bullhorn",
             value: "announcements",
+          },
+          {
+            icon: "mdi-account-group-outline",
+            value: "users",
           },
           {
             icon: "mdi-google-classroom",

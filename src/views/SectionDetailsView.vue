@@ -45,8 +45,6 @@
         label="Email Student"
       >
       </v-autocomplete>
-      {{entityCustom}} <br>
-      {{entityProperty}}
     </template>
     <template #rightarea>
       <v-card class="pa-2 elevation-0 rounded-lg">

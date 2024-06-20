@@ -18,7 +18,7 @@
       <v-text-field
         v-model="entityProperty.username"
         :rules="contentRules"
-        label="Name"
+        label="Name & Last Name"
         density="compact"
         variant="outlined"
         hide-details="false"
