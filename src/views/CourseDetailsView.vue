@@ -571,19 +571,18 @@ export default {
   min-width: 150%;
   min-height: 150%;
   background-image: conic-gradient(
-    hsl(0, 100%, 50%, 0.8),
-    hsl(30, 100%, 50%, 0.8),
-    hsl(60, 100%, 50%, 0.8),
-    hsl(90, 100%, 50%, 0.8),
-    hsl(120, 100%, 50%, 0.8),
-    hsl(150, 100%, 50%, 0.8),
-    hsl(180, 100%, 50%, 0.8),
-    hsl(210, 100%, 50%, 0.8),
-    hsl(240, 100%, 60%, 0.8),
-    hsl(270, 100%, 50%, 0.8),
-    hsl(300, 100%, 50%, 0.8),
-    hsl(330, 100%, 50%, 0.8),
-    hsl(360, 100%, 50%, 0.8)
+    #3FC4C0,
+    #8FE0DE,
+    #62D9D5,
+    #3FC4C0,
+    #8FE0DE,
+    #62D9D5,
+    #3FC4C0,
+    #8FE0DE,
+    #62D9D5,
+    #3FC4C0,
+    #8FE0DE,
+    #62D9D5
   );
   animation: speeen 4s linear infinite;
   transform-origin: 0% 0%;

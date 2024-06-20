@@ -27,53 +27,69 @@
             ></apexchart>
           </v-card>
         </v-col>
-        <v-col class="d-flex flex-column ga-2" cols="12" md="5">
-          <v-card
-            class="rounded-lg text-justify pa-3 elevation-0 bg-primary"
-            color=""
+        <v-col cols="12" md="5">
+          <div
+            class="d-flex flex-column ga-2 overflow-auto elevation-0 rounded-lg pa-2"
+            color="#f2f2f2"
+            :style="`height: calc(100dvh - 80px);`"
           >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
-            necessitatibus doloremque minima debitis esse eos reprehenderit
-            repellendus atque perferendis cupiditate dolorem, saepe accusantium,
-            cumque recusandae voluptatem? Mollitia, id sapiente? Lorem ipsum
-            dolor sit amet consectetur adipisicing elit.
-          </v-card>
-          <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-            <h3>Announcement</h3>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-            eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-            voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-            molestiae quasi eaque vero! Lorem ipsum, dolor sit amet consectetur
-            adipisicing elit.
-          </v-card>
-          <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-            <h3>Announcement</h3>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-            eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-            voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-            molestiae quasi eaque vero! Lorem ipsum, dolor sit amet consectetur
-            adipisicing elit.
-          </v-card>
-          <v-card
-            class="rounded-lg text-justify pa-3 elevation-0 bg-primary"
-            color=""
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
-            necessitatibus doloremque minima debitis esse eos reprehenderit
-            repellendus atque perferendis cupiditate dolorem, saepe accusantium,
-            cumque recusandae voluptatem? Mollitia, id sapiente? Lorem ipsum
-            dolor sit amet consectetur adipisicing elit.
-          </v-card>
-          <v-card
-            class="rounded-lg text-justify pa-3 elevation-0 bg-primary"
-            color=""
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Id, fugit
-            necessitatibus doloremque minima debitis esse eos reprehenderit
-            repellendus atque perferendis cupiditate dolorem, saepe accusantium,
-            cumque recusandae voluptatem? Mollitia, id sapiente? Lorem ipsum
-            dolor sit amet consectetur adipisicing elit.
-          </v-card>
+            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
+              <h3>Announcement</h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
+              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
+              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
+              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit.
+            </v-card>
+            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
+              <h3>Announcement</h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
+              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
+              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
+              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit.
+            </v-card>
+            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
+              <h3>Announcement</h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
+              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
+              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
+              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit.
+            </v-card>
+            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
+              <h3>Announcement</h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
+              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
+              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
+              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit.
+            </v-card>
+            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
+              <h3>Announcement</h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
+              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
+              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
+              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit.
+            </v-card>
+            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
+              <h3>Announcement</h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
+              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
+              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
+              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit.
+            </v-card>
+            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
+              <h3>Announcement</h3>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
+              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
+              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
+              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit.
+            </v-card>
+          </div>
         </v-col>
       </v-row>
     </div>
