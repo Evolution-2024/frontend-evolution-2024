@@ -10,6 +10,7 @@
     list-view
     hide-detail
     :entity-property="entityProperty"
+    :hide-delete="user.roles[0] == 'ROLE_TEACHER'"
     :height-box="292"
     @edit="onEdit"
   >
@@ -504,6 +505,10 @@ export default {
         message = "";
         return message;
       }
+    },
+    user() {
+      const userString = localStorage.getItem("user");
+      return userString ? JSON.parse(userString) : null;
     },
     showAlert() {
       return this.amenities != null;

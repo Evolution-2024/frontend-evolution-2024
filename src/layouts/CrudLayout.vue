@@ -25,6 +25,7 @@
               <v-icon class="ml-0 ml-md-1">mdi-refresh</v-icon>
             </v-btn>
             <v-btn
+              v-if="!hideAdd"
               slim
               variant="tonal"
               density="comfortable"
@@ -217,6 +218,10 @@ export default {
       required: true,
     },
     hideHover: {
+      type: Boolean,
+      default: false,
+    },
+    hideAdd: {
       type: Boolean,
       default: false,
     },

@@ -4,6 +4,9 @@
     icon="book-open-variant"
     :entity-property="entityProperty"
     :headers="headers"
+    :hide-delete="user.roles[0] == 'ROLE_TEACHER'"
+    :hide-edit="user.roles[0] == 'ROLE_TEACHER'"
+    :hide-add="user.roles[0] == 'ROLE_TEACHER'"
   >
     <template #form>
       <v-text-field
@@ -76,6 +79,12 @@ export default {
       loadingSelect: false,
       competences: [],
     };
+  },
+  computed:{
+    user() {
+      const userString = localStorage.getItem("user");
+      return userString ? JSON.parse(userString) : null;
+    },
   },
   methods: {
     async getAllCompetences(endPoint) {

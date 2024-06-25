@@ -238,12 +238,12 @@ export default {
         value: "ROLE_TEACHER",
         modules: [
           {
-            icon: "mdi-book-open-variant",
-            value: "courses",
-          },
-          {
             icon: "mdi-view-dashboard",
             value: "home",
+          },
+          {
+            icon: "mdi-book-open-variant",
+            value: "courses",
           },
           {
             icon: "mdi-google-classroom",
