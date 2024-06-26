@@ -4,9 +4,9 @@
     icon="book-open-variant"
     :entity-property="entityProperty"
     :headers="headers"
-    :hide-delete="user.roles[0] == 'ROLE_TEACHER'"
-    :hide-edit="user.roles[0] == 'ROLE_TEACHER'"
-    :hide-add="user.roles[0] == 'ROLE_TEACHER'"
+    :hide-delete="!user.roles.includes('ROLE_ADMIN')"
+    :hide-edit="!user.roles.includes('ROLE_ADMIN')"
+    :hide-add="!user.roles.includes('ROLE_ADMIN')"
   >
     <template #form>
       <v-text-field

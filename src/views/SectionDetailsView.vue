@@ -13,20 +13,32 @@
     hide-edit
     :entity-property="entityProperty"
     :height-box="292"
+    :hide-add="user.roles.includes('ROLE_TEACHER')"
   >
     <div class="d-flex flex-column ga-2">
       <v-card class="elevation-0" :loading="loading" height="200">
-        <h1>{{ entityDetail.name }}</h1>
+        <div class="d-flex justify-space-between align-center">
+          <h1>{{ entityDetail.name }}</h1>
+        </div>
         <p class="text-caption pb-3">Descripcion</p>
         <p class="text-justify">
-          {{ entityDetail.description }} || Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Ex autem voluptatem corporis numquam nam
-          voluptates alias veniam. Debitis quisquam illo doloribus, facilis
-          pariatur iure ipsam amet incidunt doloremque, dolor voluptatem.
-          consectetur adipisicing elit.
+          {{ entityDetail.description }}
         </p>
       </v-card>
     </div>
+    <template #appendUpButton>
+      <v-btn
+        slim
+        variant="tonal"
+        density="comfortable"
+        color="white"
+        class="font-weight-bold"
+        @click="openDialogAsign"
+      >
+        <p class="d-none d-md-flex">Teacher</p>
+        <v-icon class="ml-0 ml-md-1">mdi-adjust</v-icon>
+      </v-btn>
+    </template>
     <template #upList>
       <h2 class="pa-2">Alumnos</h2>
     </template>
@@ -40,7 +52,7 @@
         :items="students"
         item-title="email"
         return-object
-        @focus="getAllStudents('users?roleId=1')"
+        @focus="getAllStudents"
         @update:modelValue="changeProperty"
         label="Email Student"
       >
@@ -57,6 +69,91 @@
         </div>
       </v-card>
     </template>
+    <v-dialog max-width="600" v-model="dialogAsignTeacher">
+      <v-card class="pa-6 rounded-lg d-flex flex-column ga-3">
+        <div class="d-flex align-center">
+          <h3 class="text-capitalize">ASIGNAR PROFESOR</h3>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            icon
+            density="comfortable"
+            class="elevation-0"
+            @click="closeDialog"
+          >
+            <v-icon color="primary">mdi-close-thick</v-icon>
+          </v-btn>
+        </div>
+        <v-alert
+          icon="mdi-information-outline"
+          variant="tonal"
+          class="text-caption"
+          border="start"
+          color="primary"
+        >
+          <p class="text-caption font-weight-bold">Alert Title</p>
+          <div style="line-height: 1.2 !important">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam eos
+            expedita repudiandae repellendus ullam debitis iure cumque ipsam
+            atque. Unde eius maiores rem laborum!
+          </div>
+        </v-alert>
+        <v-form ref="formAsignTeacher" class="d-flex flex-column ga-3">
+          <v-autocomplete
+            density="compact"
+            hide-details
+            variant="outlined"
+            v-model="entityCustomTeacher"
+            :loading="loadingSelect"
+            :rules="contentRules"
+            :items="teachers"
+            item-title="email"
+            return-object
+            @focus="getAllTeachers"
+            label="Email Teacher"
+          >
+          </v-autocomplete>
+          <v-autocomplete
+            density="compact"
+            hide-details
+            variant="outlined"
+            v-model="entityCustomCourse"
+            :loading="loadingSelect"
+            :rules="contentRules"
+            :items="courses"
+            item-title="name"
+            return-object
+            @focus="getAllCourses"
+            label="Course"
+          >
+          </v-autocomplete>
+        </v-form>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-btn variant="text" @click="cleanDialog"> Borrar </v-btn>
+          <v-btn variant="tonal" color="primary" @click="asignTeacherPost">
+            Asignar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-snackbar
+        v-model="snackbar"
+        :timeout="2000"
+        :color="snackbarState ? 'green-accent-4' : 'red-accent-3'"
+        rounded="lg"
+        elevation="24"
+      >
+        <p class="text-white">
+          {{ snackbarState ? "Success register" : snackbarText }}
+        </p>
+
+        <template v-slot:actions>
+          <v-btn color="white" icon @click="snackbar = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
   </crud-layout>
 </template>
   
@@ -75,6 +172,8 @@ export default {
       amenities: null,
       alert: true,
 
+      dialogAsignTeacher: false,
+
       loadingSelect: false,
 
       contentRules: [(v) => !!v || "Required"],
@@ -88,6 +187,8 @@ export default {
         description: null,
       },
 
+      courses: [],
+      teachers: [],
       students: [],
 
       headers: [{ text: "Student. Cod.", value: "studentCode" }],
@@ -97,10 +198,26 @@ export default {
         sectionId: null,
         studentCode: null,
       },
-      entityCustom:null
+      entityCustom: null,
+      entityCustomTeacher: null,
+      entityCustomCourse: null,
+      snackbar: false,
+    snackbarState: false,
+    snackbarText: "",
     };
   },
   methods: {
+    openDialogAsign() {
+      this.dialogAsignTeacher = true;
+    },
+    closeDialog() {
+      this.$refs.formAsignTeacher.reset();
+      this.dialogAsignTeacher = false;
+      this.loadingSelect = false;
+    },
+    cleanDialog() {
+      this.$refs.formAsignTeacher.reset();
+    },
     async getItemId(endPoint) {
       this.loading = true;
       try {
@@ -114,33 +231,83 @@ export default {
         console.error(`Hubo un error al obtener /${endPoint}:`, error);
       }
     },
-    async getAllStudents(endPoint) {
+    async getAllStudents() {
       this.loadingSelect = true;
       try {
-        const response = await this.$axios2.get(`/${endPoint}&size=100`);
+        const response = await this.$axios2.get(`/users?roleId=1&size=100`);
         this.loadingSelect = false;
 
         this.students = response.data.resource;
-        console.log(`get - /${endPoint}`, this.students);
+        console.log(`get - /users?roleId=1`, this.students);
       } catch (error) {
-        console.error(`Hubo un error al obtener /${endPoint}:`, error);
+        console.error(`Hubo un error al obtener /users?roleId=1:`, error);
       }
     },
-    changeProperty(){
-      if(this.entityCustom != null){
+    async getAllTeachers() {
+      this.loadingSelect = true;
+      try {
+        const response = await this.$axios2.get(`/users?roleId=2&size=100`);
+        this.loadingSelect = false;
+
+        this.teachers = response.data.resource;
+        console.log(`get - /users?roleId=2`, this.teachers);
+      } catch (error) {
+        console.error(`Hubo un error al obtener /users?roleId=1:`, error);
+      }
+    },
+    async getAllCourses() {
+      this.loadingSelect = true;
+      try {
+        const response = await this.$axios3.get(`/courses?size=100`);
+        this.loadingSelect = false;
+
+        this.courses = response.data.resource;
+        console.log(`get - /courses`, this.teachers);
+      } catch (error) {
+        console.error(`Hubo un error al obtener /courses`, error);
+      }
+    },
+    changeProperty() {
+      if (this.entityCustom != null) {
         this.entityProperty.studentCode = this.entityCustom.id;
         this.entityProperty.studentUsername = this.entityCustom.username;
       }
-    }
+    },
+    async asignTeacherPost() {
+      const { valid } = await this.$refs.formAsignTeacher.validate();
+
+      if (valid) {
+        this.loadingSelect = true;
+        try {
+          const response = await this.$axios3.post(`/lesson`, {
+            teacherUsername: this.entityCustomTeacher.username,
+            teacherCode: this.entityCustomTeacher.id,
+            sectionCode: Number(this.sectionId),
+            courseCode: this.entityCustomCourse.id,
+          });
+          console.log(`post - /lesson`, response);
+          this.loadingSelect = false;
+          this.closeDialog();
+        } catch (error) {
+          console.log(error);
+          if (error.response.status == 400) {
+            this.closeDialog();
+            this.loadingCrud = false;
+
+            this.snackbarText = error.response.data.message;
+            this.snackbarState = false;
+            this.snackbar = true;
+          }
+        }
+      }
+    },
   },
   mounted() {},
   computed: {
-    // compareTotal(){
-    //   if(this.entityCustom != null){
-    //     // this.entityProperty.studentCode = this.entityCustom.id;
-    //   }
-    //   return false
-    // }
+    user() {
+      const userString = localStorage.getItem("user");
+      return userString ? JSON.parse(userString) : null;
+    },
   },
   async created() {
     this.sectionId = await this.$route.params.id;

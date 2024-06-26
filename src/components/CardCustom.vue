@@ -87,7 +87,7 @@
                     >Detail</v-tooltip
                   >
                 </v-btn>
-                <slot name="appendButton"></slot>
+                <slot name="appendButton" v-if="!hideAppend"></slot>
               </div>
             </v-expand-transition>
           </v-card>
@@ -194,6 +194,10 @@ export default {
       default: false,
     },
     hideDelete: {
+      type: Boolean,
+      default: false,
+    },
+    hideAppend: {
       type: Boolean,
       default: false,
     },

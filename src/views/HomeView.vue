@@ -28,67 +28,17 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="5">
+          <h1 class="text-capitalize">ultimos 5 anuncios</h1>
           <div
             class="d-flex flex-column ga-2 overflow-auto elevation-0 rounded-lg pa-2"
             color="#f2f2f2"
             :style="`height: calc(100dvh - 80px);`"
           >
-            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
+            <v-card v-for="(item, index) in announcements" :key="index" class="rounded-lg text-justify pa-3" variant="outlined">
+              <h3>Anuncio: {{item.title}}</h3>
+              {{item.description}}
             </v-card>
-            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
-            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
-            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
-            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
-            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
-            <v-card class="rounded-lg text-justify pa-2" variant="outlined">
-              <h3>Announcement</h3>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque,
-              eveniet aut ut iure cumque sed veritatis praesentium eum, minima
-              voluptate earum voluptatibus suscipit? Magnam iusto excepturi
-              molestiae quasi eaque vero! Lorem ipsum, dolor sit amet
-              consectetur adipisicing elit.
-            </v-card>
+            
           </div>
         </v-col>
       </v-row>
@@ -107,22 +57,23 @@ export default {
   },
   data() {
     return {
+      announcements: [],
       series: [
         {
           name: "TEAM A",
           type: "column",
           data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
         },
-        {
-          name: "TEAM B",
-          type: "area",
-          data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-        },
-        {
-          name: "TEAM C",
-          type: "line",
-          data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-        },
+        // {
+        //   name: "TEAM B",
+        //   type: "area",
+        //   data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+        // },
+        // {
+        //   name: "TEAM C",
+        //   type: "line",
+        //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+        // },
       ],
       chartOptions: {
         chart: {
@@ -269,6 +220,22 @@ export default {
         },
       },
     };
+  },
+  methods: {
+    async getAnnouncemets(){
+      const endPoint = 'announcements'
+      try {
+        const response = await this.$axios3.get(`/${endPoint}?size=5`);
+
+        this.announcements = response.data.resource;
+        console.log(`get - /${endPoint}`, this.announcements);
+      } catch (error) {
+        console.error(`Hubo un error al obtener /${endPoint}:`, error);
+      }
+    }
+  },
+  mounted() {
+    this.getAnnouncemets();
   },
 };
 </script>

@@ -4,6 +4,9 @@
     icon="google-classroom"
     :entity-property="entityProperty"
     :headers="headers"
+    :hide-add="user.roles.includes('ROLE_TEACHER')"
+    :hide-edit="user.roles.includes('ROLE_TEACHER')"
+    :hide-delete="user.roles.includes('ROLE_TEACHER')"
   >
     <template #form>
       <v-text-field
@@ -110,8 +113,16 @@ export default {
       ],
     };
   },
+  computed: {
+    user() {
+      const userString = localStorage.getItem("user");
+      return userString ? JSON.parse(userString) : null;
+    },
+  },
   methods: {
   },
-  mounted() {},
+  mounted() {
+    
+  },
 };
 </script>

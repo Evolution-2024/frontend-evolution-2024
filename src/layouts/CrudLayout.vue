@@ -24,6 +24,7 @@
               <p class="d-none d-md-flex">Refresh</p>
               <v-icon class="ml-0 ml-md-1">mdi-refresh</v-icon>
             </v-btn>
+            <slot name="appendUpButton"></slot>
             <v-btn
               v-if="!hideAdd"
               slim
@@ -64,6 +65,7 @@
                 :hide-edit="hideEdit"
                 :hide-hover="hideHover"
                 :hide-delete="hideDelete"
+                :hide-append="hideAppend"
                 :defaultTitle="defaultTitle"
                 :alignEnd="alignEnd"
                 @delete="deleteItem"
@@ -71,8 +73,7 @@
                 @detail="detailItem"
               >
                 <template #appendButton>
-                  <slot name="appendButton" v-bind="item">
-                  </slot>
+                  <slot name="appendButton" v-bind="item"> </slot>
                 </template>
               </card-custom>
             </v-col>
@@ -229,6 +230,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    hideAppend: {
+      type: Boolean,
+      default: false,
+    },
     hideDelete: {
       type: Boolean,
       default: false,
@@ -266,14 +271,18 @@ export default {
   }),
 
   watch: {
-    // dataLayout(newVal, oldVal){
-    //     console.log('NEW VAL --->', newVal);
-    // }
   },
 
   computed: {
     lengthCrud() {
       return this.itemsCrud ? this.itemsCrud.length : 0;
+    },
+    entity() {
+      const { id, ...rest } = this.entityProperty;
+      return { id, rest };
+    },
+    rest() {
+      return this.entity.rest;
     },
   },
 
@@ -371,7 +380,7 @@ export default {
           if (this.alter) {
             const response = await this.$axios2[this.onEdit ? "put" : "post"](
               `/${this.postEp ? this.postEp : this.endPoint}`,
-              this.entityProperty
+              !this.onEdit ? this.rest : this.entityProperty
             );
             console.log(
               `${this.onEdit ? "put" : "post"} - /${
@@ -382,7 +391,7 @@ export default {
           } else {
             const response = await this.$axios3[this.onEdit ? "put" : "post"](
               `/${this.postEp ? this.postEp : this.endPoint}`,
-              this.entityProperty
+              !this.onEdit ? this.rest : this.entityProperty
             );
             console.log(
               `${this.onEdit ? "put" : "post"} - /${

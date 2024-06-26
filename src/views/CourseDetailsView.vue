@@ -10,7 +10,9 @@
     list-view
     hide-detail
     :entity-property="entityProperty"
-    :hide-delete="user.roles[0] == 'ROLE_TEACHER'"
+    :hide-delete="!user.roles.includes('ROLE_ADMIN')"
+    :hide-edit="!user.roles.includes('ROLE_TEACHER')"
+    :hide-add="!user.roles.includes('ROLE_TEACHER')"
     :height-box="292"
     @edit="onEdit"
   >
@@ -25,6 +27,7 @@
     </div>
     <template v-slot:appendButton="slotProps">
       <v-btn
+        v-if="user.roles.includes('ROLE_TEACHER')"
         size="small"
         variant="tonal"
         color="primary"
@@ -33,6 +36,17 @@
       >
         <v-icon>mdi-assistant</v-icon>
         <v-tooltip activator="parent" location="top">Examen IA</v-tooltip>
+      </v-btn>
+      <v-btn
+        v-if="!user.roles.includes('ROLE_ADMIN')"
+        size="small"
+        variant="tonal"
+        color="primary"
+        icon
+        @click="openExam(slotProps)"
+      >
+        <v-icon>mdi-note-text</v-icon>
+        <v-tooltip activator="parent" location="top">Examen</v-tooltip>
       </v-btn>
     </template>
     <template #upList>
@@ -112,8 +126,9 @@
         <div class="bg-white">
           <h3>Competencias</h3>
           <div class="text-justify py-2">
-
-            En el contexto educativo, competencia se refiere a las habilidades y conocimientos fundamentales que los estudiantes deben desarrollar para cumplir con objetivos específicos de aprendizaje. 
+            En el contexto educativo, competencia se refiere a las habilidades y
+            conocimientos fundamentales que los estudiantes deben desarrollar
+            para cumplir con objetivos específicos de aprendizaje.
           </div>
         </div>
         <v-chip-group v-model="amenities" column>
@@ -173,7 +188,7 @@
     <v-dialog v-model="dialogExam" :max-width="750" persistent>
       <v-card class="pa-6 rounded-lg elevation-0 d-flex flex-column ga-3">
         <div class="d-flex align-center">
-          <h3 class="text-capitalize">Registrar: Examen</h3>
+          <h3 class="text-capitalize">Examen</h3>
           <v-spacer></v-spacer>
           <v-btn
             text
@@ -198,25 +213,21 @@
             expedita.
           </div>
         </v-alert>
-        <v-form
-              ref="form"
-              class="w-100"
-              :disabled="loadingGenerate"
-            >
+        <v-form ref="form" class="w-100" :disabled="loadingGenerate">
           <v-autocomplete
-          hide-details
-          :rules="contentRules"
-          density="compact"
-          variant="outlined"
-          v-model="sectionCode"
-          :loading="loadingSelect"
-          :items="sections"
-          item-title="code"
-          item-value="id"
-          @focus="getAllSections('sections')"
-          label="Section"
-        ></v-autocomplete>
-            </v-form>
+            hide-details
+            :rules="contentRules"
+            density="compact"
+            variant="outlined"
+            v-model="sectionCode"
+            :loading="loadingSelect"
+            :items="sections"
+            item-title="code"
+            item-value="id"
+            @focus="getAllSections('sections')"
+            label="Section"
+          ></v-autocomplete>
+        </v-form>
         <v-card
           max-height="400"
           class="overflow-auto d-flex flex-column ga-3 elevation-0"
@@ -290,6 +301,64 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog max-width="600" v-model="dialogExamStudent" persistent>
+      <v-card class="pa-6 rounded-lg elevation-0 d-flex flex-column ga-3">
+        <div class="d-flex align-center">
+          <h3 class="text-capitalize">Examen</h3>
+          <v-spacer></v-spacer>
+          <v-btn
+          v-if="user.roles.includes('ROLE_TEACHER')"
+            text
+            icon
+            density="comfortable"
+            class="elevation-0"
+            @click="dialogExamStudent = !dialogExamStudent"
+          >
+            <v-icon color="primary">mdi-close-thick</v-icon>
+          </v-btn>
+        </div>
+        <v-card
+          v-if="!exposeNota"
+          max-height="400"
+          class="overflow-auto d-flex flex-column ga-3 elevation-0"
+        >
+          <div v-for="(item, index) in getExam[0].examDetails" :key="index">
+            <v-card variant="outlined" class="pa-3 rounded-lg">
+              <p class="font-weight-black mb-2">
+                {{ index + 1 }}. {{ item.question }}
+              </p>
+              <v-radio-group
+                density="compact"
+                hide-details
+                v-model="item[user.roles.includes('ROLE_TEACHER')?'correctOptionOrder':'selectOption']"
+              >
+                <v-radio
+                :disabled="user.roles.includes('ROLE_TEACHER')"
+                  color="primary"
+                  v-for="(alternative, i) in item.options"
+                  :key="i"
+                  :label="alternative"
+                  :value="i + 1"
+                ></v-radio>
+              </v-radio-group>
+            </v-card>
+          </div>
+        </v-card>
+        <v-expand-transition>
+          <v-card v-if="exposeNota" class="pa-6 d-flex flex-column align-center elevation-0 justify-center" min-height="350">
+            <h3>Nota: </h3>
+            <h1>{{ calculateScore }}</h1>
+          </v-card>
+        </v-expand-transition>
+        <v-divider v-if="!user.roles.includes('ROLE_TEACHER')" ></v-divider>
+
+        <v-card-actions>
+          <v-btn v-if="!user.roles.includes('ROLE_TEACHER')" variant="tonal" color="primary" @click="postExam" :disabled="exposeNota">
+            Terminar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </crud-layout>
 </template>
 
@@ -310,6 +379,11 @@ export default {
       examDetailResources: [],
 
       loadingGenerate: false,
+
+      getExam: null,
+      getExamCopy: null,
+      dialogExamStudent: false,
+      exposeNota: false,
 
       sectionCode: "",
       loadingSelect: false,
@@ -353,6 +427,53 @@ export default {
     };
   },
   methods: {
+    async postExam() {
+      console.log("modificado -> ", this.getExam);
+      this.exposeNota =true;
+
+      try {
+        const response = await this.$axios4.post("/student-exam", {
+          topicCode: this.getExam[0].topicCode,
+          sectionCode: this.getExam[0].sectionCode,
+          courseCode: Number(this.courseId),
+          studentCode: this.user.id,
+          studentUsername: this.user.username,
+          examCode: this.getExam[0].topicCode.id,
+          note: this.calculateScore,
+        });
+        console.log("response Exams", response);
+        this.exposeNota =true;
+        setTimeout(() => {
+          this.dialogExamStudent = false;
+          setTimeout(() => {
+            this.exposeNota =false;
+            
+          }, 200);
+        }, 4500);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async openExam(item) {
+      const endPoint = "exams";
+      try {
+        const response = await this.$axios4.get(
+          `/${endPoint}?topicCode=${item.id}`
+        );
+
+        this.getExam = response.data.resource;
+        if (this.getExam.length == 0) {
+          this.dialogExamStudent = false;
+          console.log('CERRADO');
+        }else{
+          this.dialogExamStudent = true;
+          console.log('ABIERTO');
+        }
+        console.log(`get - /${endPoint}`, this.getExam);
+      } catch (error) {
+        console.error(`Hubo un error al obtener /${endPoint}:`, error);
+      }
+    },
     async getAllSections(endPoint) {
       this.loadingSelect = true;
       try {
@@ -488,14 +609,24 @@ export default {
     },
   },
   watch: {
-    // overlay (val) {
-    //   val && setTimeout(() => {
-    //     this.overlay = false
-    //   }, 3000)
-    // },
+    getExam(val) {
+      console.log("nuevo", val);
+    },
   },
   mounted() {},
   computed: {
+    calculateScore() {
+      let score = 0;
+      const pointsPerQuestion = 4;
+
+      this.getExam[0].examDetails.forEach((detail) => {
+        if (detail.selectOption === detail.correctOptionOrder) {
+          score += pointsPerQuestion;
+        }
+      });
+
+      return score;
+    },
     selectedFileUpdate() {
       let message = "";
       if (this.entityProperty.file == null) {
@@ -572,18 +703,18 @@ export default {
   min-width: 150%;
   min-height: 150%;
   background-image: conic-gradient(
-    #3FC4C0,
-    #8FE0DE,
-    #62D9D5,
-    #3FC4C0,
-    #8FE0DE,
-    #62D9D5,
-    #3FC4C0,
-    #8FE0DE,
-    #62D9D5,
-    #3FC4C0,
-    #8FE0DE,
-    #62D9D5
+    #3fc4c0,
+    #8fe0de,
+    #62d9d5,
+    #3fc4c0,
+    #8fe0de,
+    #62d9d5,
+    #3fc4c0,
+    #8fe0de,
+    #62d9d5,
+    #3fc4c0,
+    #8fe0de,
+    #62d9d5
   );
   animation: speeen 4s linear infinite;
   transform-origin: 0% 0%;
