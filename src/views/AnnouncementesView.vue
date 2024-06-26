@@ -51,10 +51,7 @@
     </template>
     <template #rightarea>
       <v-card class="pa-2 elevation-0">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio, saepe
-        illo. Aliquam perspiciatis adipisci laudantium voluptatem tempora, quo
-        deleniti rerum blanditiis ducimus sint neque dignissimos debitis tenetur
-        labore consectetur magnam.
+        En esta sección, podrás explorar los anuncios y comunicados creados por los profesores de nuestra institución educativa. Aquí encontrarás información importante sobre eventos, cambios en el horario de clases, recordatorios y otros mensajes relevantes para tu vida académica. Esta herramienta está diseñada para mantenerte informado y al tanto de las últimas noticias y actualizaciones. ¡Mantente conectado y asegúrate de no perderte ningún anuncio importante de tus profesores!
       </v-card>
     </template>
   </crud-layout>

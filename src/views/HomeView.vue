@@ -29,6 +29,10 @@
         </v-col>
         <v-col cols="12" md="5">
           <h1 class="text-capitalize">ultimos 5 anuncios</h1>
+          <div class="pa-2">
+            En esta sección del dashboard, podrás ver un resumen de los últimos cinco anuncios publicados por los profesores. Aquí encontrarás las comunicaciones más recientes y relevantes, que te mantendrán informado sobre eventos importantes, cambios en el horario de clases, recordatorios y otros mensajes cruciales para tu vida académica.
+
+          </div>
           <div
             class="d-flex flex-column ga-2 overflow-auto elevation-0 rounded-lg pa-2"
             color="#f2f2f2"

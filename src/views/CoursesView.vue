@@ -47,10 +47,7 @@
     </template>
     <template #rightarea>
       <v-card class="pa-2 elevation-0">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio, saepe
-        illo. Aliquam perspiciatis adipisci laudantium voluptatem tempora, quo
-        deleniti rerum blanditiis ducimus sint neque dignissimos debitis tenetur
-        labore consectetur magnam.
+        En esta vista, podrás explorar los diversos cursos ofrecidos por nuestra institución educativa. Aquí encontrarás información detallada sobre cada curso, incluyendo su nombre, descripción y el número de estudiantes inscritos. Esta herramienta está diseñada para ayudarte a conocer y seleccionar los cursos que mejor se adapten a tus intereses y necesidades académicas, facilitando así tu proceso educativo. ¡Descubre todo lo que nuestra institución tiene para ofrecerte y planifica tu futuro académico con nosotros!
       </v-card>
     </template>
   </crud-layout>

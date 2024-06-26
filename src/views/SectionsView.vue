@@ -55,10 +55,7 @@
     </template>
     <template #rightarea>
       <v-card class="pa-2 elevation-0">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio, saepe
-        illo. Aliquam perspiciatis adipisci laudantium voluptatem tempora, quo
-        deleniti rerum blanditiis ducimus sint neque dignissimos debitis tenetur
-        labore consectetur magnam.
+        En esta sección, podrás explorar las diversas secciones de los cursos que ofrece nuestra institución educativa. Aquí encontrarás información detallada sobre cada sección, incluyendo el nombre del instructor, horarios, y la cantidad de estudiantes inscritos. Esta herramienta está diseñada para ayudarte a conocer y seleccionar las secciones que mejor se adapten a tus intereses y necesidades académicas, facilitando así tu planificación y experiencia educativa. ¡Descubre todas las opciones disponibles y organiza tu horario de la manera más conveniente para ti!
       </v-card>
     </template>
   </crud-layout>
